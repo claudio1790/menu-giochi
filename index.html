@@ -1274,42 +1274,47 @@ function filterGames() {
   const nameFilter = document.getElementById('filterName').value.toLowerCase();
   const diffFilter = document.getElementById('filterDifficulty').value;
   const catFilter = document.getElementById('filterCategory').value;
-  const playersFilter = document.getElementById('players-filter').value;
-  const durationFilter = document.getElementById('filterDuration').value;
+  const playersFilterVal = document.getElementById('players-filter').value;
+  const durationFilterVal = document.getElementById('filterDuration').value;
 
   const container = document.getElementById('gamesContainer');
   container.innerHTML = '';
 
-  const filteredGames = games.filter(g => {
-    // filtro nome, difficoltà, categoria come prima
-    if (!g.titolo.toLowerCase().includes(nameFilter)) return false;
-    if (diffFilter !== "" && g.difficolta !== diffFilter) return false;
-    if (catFilter !== "" && g.categoria !== catFilter) return false;
+  games.forEach(game => {
+    // filtro nome
+    if (nameFilter && !game.titolo.toLowerCase().includes(nameFilter)) return;
+
+    // filtro difficoltà
+    if (diffFilter && game.difficolta !== diffFilter) return;
+
+    // filtro categoria
+    if (catFilter && game.categoria !== catFilter) return;
 
     // filtro giocatori
-    if (playersFilter !== "") {
-      const [minPlayers, maxPlayers] = parseGiocatoriRange(g.giocatori);
-      const valPlayers = (playersFilter === "8") ? 8 : parseInt(playersFilter);
-      if (!(valPlayers >= minPlayers && valPlayers <= maxPlayers)) return false;
+    if (playersFilterVal) {
+      // parse range gioco
+      const [minG, maxG] = parseGiocatoriRange(game.giocatori);
+      // parse filtro giocatori, qui assume valore singolo, oppure implementa come range se vuoi
+      const pf = parseInt(playersFilterVal);
+      if (isNaN(pf)) {
+        // per opzione 8+, pf sarà NaN, fai gestione specifica:
+        if (playersFilterVal === '8+') {
+          if (maxG < 8) return;
+        }
+      } else {
+        if (pf < minG || pf > maxG) return;
+      }
     }
 
     // filtro durata
-    if (durationFilter !== "") {
-      const durMedia = parseDurataMinutes(g.durata);
-      if (durationFilter === "short" && !(durMedia < 30)) return false;
-      if (durationFilter === "medium" && !(durMedia >= 30 && durMedia <= 60)) return false;
-      if (durationFilter === "long" && !(durMedia > 60)) return false;
+    if (durationFilterVal) {
+      const durMedia = parseDurataMinutes(game.durata);
+      if (durationFilterVal === 'short' && durMedia >= 30) return;
+      if (durationFilterVal === 'medium' && (durMedia < 30 || durMedia > 60)) return;
+      if (durationFilterVal === 'long' && durMedia <= 60) return;
     }
 
-    return true;
-  });
-
-  if (filteredGames.length === 0) {
-    container.innerHTML = '<p style="text-align:center; font-weight:bold;">Nessun gioco trovato.</p>';
-    return;
-  }
-
-  filteredGames.forEach(game => {
+    // se passa i filtri, crea la card
     container.appendChild(createGameCard(game));
   });
 }
