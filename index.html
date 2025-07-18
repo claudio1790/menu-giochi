@@ -136,8 +136,8 @@
     <option value="Avanzato">Avanzato</option>
   </select>
 
-  <label for="players-filter">Giocatori:</label>
-<select id="players-filter">
+ <label for="players-filter">Giocatori:</label>
+ <select id="players-filter">
   <option value="">Tutti</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -145,13 +145,17 @@
   <option value="4">4</option>
   <option value="5">5</option>
   <option value="6">6</option>
-  <option value="7+">7+</option>
-</select>
+  <option value="7">7</option>
+  <option value="8">8+</option>
+ </select>
 
  <label for="filterDuration">Durata:</label>
-    <select id="filterDuration">
-      <option value="">Tutte</option>
-    </select>
+ <select id="filterDuration">
+  <option value="">Tutte</option>
+  <option value="short">&lt; 30 min</option>
+  <option value="medium">30 - 60 min</option>
+  <option value="long">&gt; 60 min</option>
+ </select>
 
   <label for="filterCategory">Categoria:</label>
   <select id="filterCategory">
@@ -1204,24 +1208,100 @@ function createGameCard(game) {
   return card;
 }
 
+function parseGiocatoriRange(rangeStr) {
+  // Esempio: "2–5", "1–5", "2", "7+"
+  if (!rangeStr) return [];
+  if (rangeStr.includes('–')) {
+    const parts = rangeStr.split('–').map(s => s.trim());
+    return [parseInt(parts[0]), parseInt(parts[1])];
+  } else if (rangeStr.endsWith('+')) {
+    const num = parseInt(rangeStr);
+    return [num, Infinity];
+  } else {
+    const num = parseInt(rangeStr);
+    return [num, num];
+  }
+}
+
+function parseDurataMinutes(durStr) {
+  // Esempi: "5–30 min", "25 min", "30-40 min", "40–70 min"
+  if (!durStr) return 0;
+  let match = durStr.match(/(\d+)(?:\D+)?(?:–|-)?(\d+)?/);
+  if (!match) return 0;
+  const min1 = parseInt(match[1]);
+  const min2 = match[2] ? parseInt(match[2]) : min1;
+  // Ritorna media (opzionale, o solo min)
+  return (min1 + min2) / 2;
+}
+  
 function filterGames() {
   const nameFilter = document.getElementById('filterName').value.toLowerCase();
   const diffFilter = document.getElementById('filterDifficulty').value;
   const catFilter = document.getElementById('filterCategory').value;
-  const playersFilterVal = document.getElementById('players-filter').value;
-  const durationFilterVal = document.getElementById('filterDuration').value;
+  const playersFilter = document.getElementById('players-filter').value;
+  const durationFilter = document.getElementById('filterDuration').value;
+
+  const container = document.getElementById('gamesContainer');
+  container.innerHTML = '';
+
+  function parseGiocatoriRange(rangeStr) {
+  // Esempio: "2–5", "1–5", "2", "7+"
+  if (!rangeStr) return [];
+  if (rangeStr.includes('–')) {
+    const parts = rangeStr.split('–').map(s => s.trim());
+    return [parseInt(parts[0]), parseInt(parts[1])];
+  } else if (rangeStr.endsWith('+')) {
+    const num = parseInt(rangeStr);
+    return [num, Infinity];
+  } else {
+    const num = parseInt(rangeStr);
+    return [num, num];
+  }
+}
+
+function parseDurataMinutes(durStr) {
+  // Esempi: "5–30 min", "25 min", "30-40 min", "40–70 min"
+  if (!durStr) return 0;
+  let match = durStr.match(/(\d+)(?:\D+)?(?:–|-)?(\d+)?/);
+  if (!match) return 0;
+  const min1 = parseInt(match[1]);
+  const min2 = match[2] ? parseInt(match[2]) : min1;
+  // Ritorna media (opzionale, o solo min)
+  return (min1 + min2) / 2;
+}
+
+function filterGames() {
+  const nameFilter = document.getElementById('filterName').value.toLowerCase();
+  const diffFilter = document.getElementById('filterDifficulty').value;
+  const catFilter = document.getElementById('filterCategory').value;
+  const playersFilter = document.getElementById('players-filter').value;
+  const durationFilter = document.getElementById('filterDuration').value;
 
   const container = document.getElementById('gamesContainer');
   container.innerHTML = '';
 
   const filteredGames = games.filter(g => {
-    return (
-      g.titolo.toLowerCase().includes(nameFilter) &&
-      (diffFilter === "" || g.difficolta === diffFilter) &&
-      (catFilter === "" || g.categoria === catFilter) &&
-      (playersFilterVal === "" || g.giocatori === playersFilterVal) &&
-      (durationFilterVal === "" || g.durata === durationFilterVal)
-    );
+    // filtro nome, difficoltà, categoria come prima
+    if (!g.titolo.toLowerCase().includes(nameFilter)) return false;
+    if (diffFilter !== "" && g.difficolta !== diffFilter) return false;
+    if (catFilter !== "" && g.categoria !== catFilter) return false;
+
+    // filtro giocatori
+    if (playersFilter !== "") {
+      const [minPlayers, maxPlayers] = parseGiocatoriRange(g.giocatori);
+      const valPlayers = (playersFilter === "8") ? 8 : parseInt(playersFilter);
+      if (!(valPlayers >= minPlayers && valPlayers <= maxPlayers)) return false;
+    }
+
+    // filtro durata
+    if (durationFilter !== "") {
+      const durMedia = parseDurataMinutes(g.durata);
+      if (durationFilter === "short" && !(durMedia < 30)) return false;
+      if (durationFilter === "medium" && !(durMedia >= 30 && durMedia <= 60)) return false;
+      if (durationFilter === "long" && !(durMedia > 60)) return false;
+    }
+
+    return true;
   });
 
   if (filteredGames.length === 0) {
