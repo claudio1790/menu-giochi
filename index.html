@@ -142,14 +142,32 @@
   </select>
 
   <label for="filterPlayers">Numero giocatori:</label>
-  <input type="text" id="filterPlayers" placeholder="Es: 2, 3-5" />
+  <select id="filterPlayers">
+    <option value="">Tutti</option>
+    <!-- Opzioni 1-10 -->
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+  </select>
 
   <label for="filterDuration">Durata:</label>
-  <input type="text" id="filterDuration" placeholder="Es: 30 min, 15-45 min" />
+  <select id="filterDuration">
+    <option value="">Tutte</option>
+    <option value="breve">Breve (&le; 30 min)</option>
+    <option value="medio">Medio (31-60 min)</option>
+    <option value="lungo">Lungo (&gt; 60 min)</option>
+  </select>
 </div>
 
 <div class="games-container" id="gamesContainer">
-  <!-- Cards generate here -->
+  <!-- Cards generate qui -->
 </div>
 
 <script>
@@ -1128,7 +1146,7 @@ const games = [
 }
 ];
 
-// Riempie il select della categoria in base ai dati unici
+// Popola categorie filtro
 function populateCategories() {
   const select = document.getElementById('filterCategory');
   const categories = [...new Set(games.map(g => g.categoria))].sort();
@@ -1140,11 +1158,10 @@ function populateCategories() {
   });
 }
 
-// Funzione per creare una card gioco
+// Crea card gioco
 function createGameCard(game) {
   const card = document.createElement('div');
   card.classList.add('game-card');
-  // Colore bordo in base a difficoltà
   if(game.difficolta === "Semplice") card.classList.add('green');
   else if(game.difficolta === "Medio") card.classList.add('yellow');
   else if(game.difficolta === "Avanzato") card.classList.add('orange');
@@ -1168,30 +1185,92 @@ function createGameCard(game) {
   return card;
 }
 
+// Funzione per capire se un numero di giocatori è nel range del gioco
+function playersMatch(gamePlayers, selectedPlayers) {
+  // gamePlayers es: "2–5", "1–4", "2", "3–6"
+  // selectedPlayers è un numero stringa "3"
+  if (!selectedPlayers) return true;
+
+  const selNum = parseInt(selectedPlayers, 10);
+  // Rimuovo spazi e sostituisco trattini lunghi/dash con -
+  const cleaned = gamePlayers.replace(/\s+/g, '').replace(/–|—/g, '-');
+
+  // Se è un singolo numero
+  if (/^\d+$/.test(cleaned)) {
+    return selNum === parseInt(cleaned, 10);
+  }
+
+  // Se è un range (es. "2-5")
+  const parts = cleaned.split('-').map(n => parseInt(n, 10));
+  if(parts.length === 2) {
+    const [min, max] = parts;
+    return selNum >= min && selNum <= max;
+  }
+
+  // Se formato non previsto, considera no match
+  return false;
+}
+
+// Funzione per estrarre durata minima e massima in minuti
+function parseDuration(durationStr) {
+  // Normalizzo stringa
+  const d = durationStr.toLowerCase().replace('minuti', 'min').replace('minuto', 'min').replace(/\s+/g,'').replace(/–|—/g, '-');
+  
+  // Caso singolo numero "25min"
+  if (/^\d+min$/.test(d)) {
+    const val = parseInt(d.replace('min',''),10);
+    return {min: val, max: val};
+  }
+
+  // Caso range tipo "5-30min"
+  const match = d.match(/^(\d+)-(\d+)min$/);
+  if(match) {
+    return {min: parseInt(match[1],10), max: parseInt(match[2],10)};
+  }
+
+  // Caso range con spazio, es "30-40 min" con spazio? (già tolto sopra)
+  // Non trovato, ritorna null per fallback
+  return null;
+}
+
+// Funzione per controllare se la durata corrisponde alla categoria breve/medio/lungo
+function durationMatch(gameDuration, selectedDuration) {
+  if(!selectedDuration) return true;
+
+  const dur = parseDuration(gameDuration);
+  if(!dur) return false;
+
+  switch(selectedDuration) {
+    case 'breve':
+      return dur.max <= 30;
+    case 'medio':
+      return dur.min >= 31 && dur.max <= 60;
+    case 'lungo':
+      return dur.min > 60;
+    default:
+      return true;
+  }
+}
+
 // Funzione per applicare i filtri
 function applyFilters() {
   const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
   const diffFilter = document.getElementById('filterDifficulty').value;
   const catFilter = document.getElementById('filterCategory').value;
-  const playersFilter = document.getElementById('filterPlayers').value.trim().toLowerCase();
-  const durationFilter = document.getElementById('filterDuration').value.trim().toLowerCase();
+  const playersFilter = document.getElementById('filterPlayers').value;
+  const durationFilter = document.getElementById('filterDuration').value;
 
   const container = document.getElementById('gamesContainer');
   container.innerHTML = '';
 
-  // Filtra giochi
   const filtered = games.filter(game => {
     const titoloLower = game.titolo.toLowerCase();
-    const difficolta = game.difficolta;
-    const categoria = game.categoria;
-    const giocatori = game.giocatori.toLowerCase();
-    const durata = game.durata.toLowerCase();
 
     if(nameFilter && !titoloLower.includes(nameFilter)) return false;
-    if(diffFilter && difficolta !== diffFilter) return false;
-    if(catFilter && categoria !== catFilter) return false;
-    if(playersFilter && !giocatori.includes(playersFilter)) return false;
-    if(durationFilter && !durata.includes(durationFilter)) return false;
+    if(diffFilter && game.difficolta !== diffFilter) return false;
+    if(catFilter && game.categoria !== catFilter) return false;
+    if(playersFilter && !playersMatch(game.giocatori, playersFilter)) return false;
+    if(durationFilter && !durationMatch(game.durata, durationFilter)) return false;
 
     return true;
   });
@@ -1206,14 +1285,14 @@ function applyFilters() {
   });
 }
 
-// Event listeners per filtri
+// Event listeners
 document.getElementById('filterName').addEventListener('input', applyFilters);
 document.getElementById('filterDifficulty').addEventListener('change', applyFilters);
 document.getElementById('filterCategory').addEventListener('change', applyFilters);
-document.getElementById('filterPlayers').addEventListener('input', applyFilters);
-document.getElementById('filterDuration').addEventListener('input', applyFilters);
+document.getElementById('filterPlayers').addEventListener('change', applyFilters);
+document.getElementById('filterDuration').addEventListener('change', applyFilters);
 
-// Inizializza tutto
+// Inizializza pagina
 populateCategories();
 applyFilters();
 </script>
