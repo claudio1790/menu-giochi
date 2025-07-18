@@ -136,31 +136,16 @@
     <option value="Avanzato">Avanzato</option>
   </select>
 
- <label for="players-filter">Giocatori:</label>
- <select id="players-filter">
-  <option value="">Tutti</option>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-  <option value="5">5</option>
-  <option value="6">6</option>
-  <option value="7">7</option>
-  <option value="8">8+</option>
- </select>
-
- <label for="filterDuration">Durata:</label>
- <select id="filterDuration">
-  <option value="">Tutte</option>
-  <option value="short">&lt; 30 min</option>
-  <option value="medium">30 - 60 min</option>
-  <option value="long">&gt; 60 min</option>
- </select>
-
   <label for="filterCategory">Categoria:</label>
   <select id="filterCategory">
     <option value="">Tutte</option>
   </select>
+
+  <label for="filterPlayers">Numero giocatori:</label>
+  <input type="text" id="filterPlayers" placeholder="Es: 2, 3-5" />
+
+  <label for="filterDuration">Durata:</label>
+  <input type="text" id="filterDuration" placeholder="Es: 30 min, 15-45 min" />
 </div>
 
 <div class="games-container" id="gamesContainer">
@@ -1143,192 +1128,94 @@ const games = [
 }
 ];
 
-// Populate category filter dynamically
-const categorySet = new Set();
-games.forEach(g => categorySet.add(g.categoria));
-const categoryFilter = document.getElementById('filterCategory');
-categorySet.forEach(cat => {
-  const opt = document.createElement('option');
-  opt.value = cat;
-  opt.textContent = cat;
-  categoryFilter.appendChild(opt);
-});
+// Riempie il select della categoria in base ai dati unici
+function populateCategories() {
+  const select = document.getElementById('filterCategory');
+  const categories = [...new Set(games.map(g => g.categoria))].sort();
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    select.appendChild(option);
+  });
+}
 
-// Populate players filter dynamically
-const playersSet = new Set();
-games.forEach(g => playersSet.add(g.giocatori));
-const playersFilter = document.getElementById('players-filter');
-playersSet.forEach(num => {
-  const opt = document.createElement('option');
-  opt.value = num;
-  opt.textContent = num;
-  playersFilter.appendChild(opt);
-});
-
-// Populate duration filter dynamically
-const durationSet = new Set();
-games.forEach(g => durationSet.add(g.durata));
-const durationFilter = document.getElementById('filterDuration');
-durationSet.forEach(dur => {
-  const opt = document.createElement('option');
-  opt.value = dur;
-  opt.textContent = dur;
-  durationFilter.appendChild(opt);
-});
-
-// Map difficulty to color class
-const difficultyClass = {
-  "Semplice": "green",
-  "Medio": "yellow",
-  "Avanzato": "orange"
-};
-
+// Funzione per creare una card gioco
 function createGameCard(game) {
   const card = document.createElement('div');
-  card.className = `game-card ${difficultyClass[game.difficolta]}`;
+  card.classList.add('game-card');
+  // Colore bordo in base a difficoltà
+  if(game.difficolta === "Semplice") card.classList.add('green');
+  else if(game.difficolta === "Medio") card.classList.add('yellow');
+  else if(game.difficolta === "Avanzato") card.classList.add('orange');
 
   card.innerHTML = `
-    <img src="${game.img}" alt="Copertina ${game.titolo}" class="game-image" />
+    <img class="game-image" src="${game.img}" alt="${game.titolo}">
     <div class="game-info">
       <div>
         <div class="game-title">${game.titolo}</div>
-        <div class="game-details">
-          <b>Categoria:</b> ${game.categoria}<br/>
-          <b>Nr. giocatori:</b> ${game.giocatori}<br/>
-          <b>Durata:</b> ${game.durata}<br/>
-          <b>Lingua:</b> ${game.lingua}<br/>
-          <b>Tipo:</b> ${game.tipo}<br/>
-          <b>Anno:</b> ${game.anno}<br/>
-          <i>${game.descrizione}</i>
-        </div>
+        <div class="game-details"><strong>Categoria:</strong> ${game.categoria}</div>
+        <div class="game-details"><strong>Giocatori:</strong> ${game.giocatori}</div>
+        <div class="game-details"><strong>Durata:</strong> ${game.durata}</div>
+        <div class="game-details"><strong>Anno:</strong> ${game.anno}</div>
+        <div class="game-details"><strong>Lingua:</strong> ${game.lingua}</div>
+        <div class="game-details"><strong>Tipo:</strong> ${game.tipo}</div>
+        <div class="game-details"><em>${game.descrizione}</em></div>
       </div>
-      <div class="difficulty">Difficoltà: <span class="dot ${difficultyClass[game.difficolta]}"></span> ${game.difficolta}</div>
+      <div class="difficulty">Difficoltà: ${game.difficolta}</div>
     </div>
   `;
   return card;
 }
 
-function parseGiocatoriRange(rangeStr) {
-  // Esempio: "2–5", "1–5", "2", "7+"
-  if (!rangeStr) return [];
-  if (rangeStr.includes('–')) {
-    const parts = rangeStr.split('–').map(s => s.trim());
-    return [parseInt(parts[0]), parseInt(parts[1])];
-  } else if (rangeStr.endsWith('+')) {
-    const num = parseInt(rangeStr);
-    return [num, Infinity];
-  } else {
-    const num = parseInt(rangeStr);
-    return [num, num];
-  }
-}
-
-function parseDurataMinutes(durStr) {
-  // Esempi: "5–30 min", "25 min", "30-40 min", "40–70 min"
-  if (!durStr) return 0;
-  let match = durStr.match(/(\d+)(?:\D+)?(?:–|-)?(\d+)?/);
-  if (!match) return 0;
-  const min1 = parseInt(match[1]);
-  const min2 = match[2] ? parseInt(match[2]) : min1;
-  // Ritorna media (opzionale, o solo min)
-  return (min1 + min2) / 2;
-}
-  
-function filterGames() {
-  const nameFilter = document.getElementById('filterName').value.toLowerCase();
+// Funzione per applicare i filtri
+function applyFilters() {
+  const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
   const diffFilter = document.getElementById('filterDifficulty').value;
   const catFilter = document.getElementById('filterCategory').value;
-  const playersFilter = document.getElementById('players-filter').value;
-  const durationFilter = document.getElementById('filterDuration').value;
+  const playersFilter = document.getElementById('filterPlayers').value.trim().toLowerCase();
+  const durationFilter = document.getElementById('filterDuration').value.trim().toLowerCase();
 
   const container = document.getElementById('gamesContainer');
   container.innerHTML = '';
 
-  function parseGiocatoriRange(rangeStr) {
-  // Esempio: "2–5", "1–5", "2", "7+"
-  if (!rangeStr) return [];
-  if (rangeStr.includes('–')) {
-    const parts = rangeStr.split('–').map(s => s.trim());
-    return [parseInt(parts[0]), parseInt(parts[1])];
-  } else if (rangeStr.endsWith('+')) {
-    const num = parseInt(rangeStr);
-    return [num, Infinity];
-  } else {
-    const num = parseInt(rangeStr);
-    return [num, num];
+  // Filtra giochi
+  const filtered = games.filter(game => {
+    const titoloLower = game.titolo.toLowerCase();
+    const difficolta = game.difficolta;
+    const categoria = game.categoria;
+    const giocatori = game.giocatori.toLowerCase();
+    const durata = game.durata.toLowerCase();
+
+    if(nameFilter && !titoloLower.includes(nameFilter)) return false;
+    if(diffFilter && difficolta !== diffFilter) return false;
+    if(catFilter && categoria !== catFilter) return false;
+    if(playersFilter && !giocatori.includes(playersFilter)) return false;
+    if(durationFilter && !durata.includes(durationFilter)) return false;
+
+    return true;
+  });
+
+  if(filtered.length === 0) {
+    container.innerHTML = '<p style="text-align:center; font-style:italic; color:#666;">Nessun gioco corrisponde ai filtri selezionati.</p>';
+    return;
   }
-}
 
-function parseDurataMinutes(durStr) {
-  // Esempi: "5–30 min", "25 min", "30-40 min", "40–70 min"
-  if (!durStr) return 0;
-  let match = durStr.match(/(\d+)(?:\D+)?(?:–|-)?(\d+)?/);
-  if (!match) return 0;
-  const min1 = parseInt(match[1]);
-  const min2 = match[2] ? parseInt(match[2]) : min1;
-  // Ritorna media (opzionale, o solo min)
-  return (min1 + min2) / 2;
-}
-
-function filterGames() {
-  const nameFilter = document.getElementById('filterName').value.toLowerCase();
-  const diffFilter = document.getElementById('filterDifficulty').value;
-  const catFilter = document.getElementById('filterCategory').value;
-  const playersFilterVal = document.getElementById('players-filter').value;
-  const durationFilterVal = document.getElementById('filterDuration').value;
-
-  const container = document.getElementById('gamesContainer');
-  container.innerHTML = '';
-
-  games.forEach(game => {
-    // filtro nome
-    if (nameFilter && !game.titolo.toLowerCase().includes(nameFilter)) return;
-
-    // filtro difficoltà
-    if (diffFilter && game.difficolta !== diffFilter) return;
-
-    // filtro categoria
-    if (catFilter && game.categoria !== catFilter) return;
-
-    // filtro giocatori
-    if (playersFilterVal) {
-      // parse range gioco
-      const [minG, maxG] = parseGiocatoriRange(game.giocatori);
-      // parse filtro giocatori, qui assume valore singolo, oppure implementa come range se vuoi
-      const pf = parseInt(playersFilterVal);
-      if (isNaN(pf)) {
-        // per opzione 8+, pf sarà NaN, fai gestione specifica:
-        if (playersFilterVal === '8+') {
-          if (maxG < 8) return;
-        }
-      } else {
-        if (pf < minG || pf > maxG) return;
-      }
-    }
-
-    // filtro durata
-    if (durationFilterVal) {
-      const durMedia = parseDurataMinutes(game.durata);
-      if (durationFilterVal === 'short' && durMedia >= 30) return;
-      if (durationFilterVal === 'medium' && (durMedia < 30 || durMedia > 60)) return;
-      if (durationFilterVal === 'long' && durMedia <= 60) return;
-    }
-
-    // se passa i filtri, crea la card
+  filtered.forEach(game => {
     container.appendChild(createGameCard(game));
   });
 }
 
-// Init
-filterGames();
+// Event listeners per filtri
+document.getElementById('filterName').addEventListener('input', applyFilters);
+document.getElementById('filterDifficulty').addEventListener('change', applyFilters);
+document.getElementById('filterCategory').addEventListener('change', applyFilters);
+document.getElementById('filterPlayers').addEventListener('input', applyFilters);
+document.getElementById('filterDuration').addEventListener('input', applyFilters);
 
-// Event listeners
-document.getElementById('filterName').addEventListener('input', filterGames);
-document.getElementById('filterDifficulty').addEventListener('change', filterGames);
-document.getElementById('filterCategory').addEventListener('change', filterGames);
-document.getElementById('filterPlayers').addEventListener('change', filterGames);
-document.getElementById('filterDuration').addEventListener('change', filterGames);
-
+// Inizializza tutto
+populateCategories();
+applyFilters();
 </script>
 
 </body>
