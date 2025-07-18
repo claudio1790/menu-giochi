@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Menu Giochi da Tavolo</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    margin: 20px;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .legend {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    gap: 30px;
+    font-weight: bold;
+  }
+  .legend div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.green { background-color: #4CAF50; }
+  .dot.yellow { background-color: #FFC107; }
+  .dot.orange { background-color: #FF5722; }
+
+  .filters {
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+  }
+  .filters label {
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .filters select, .filters input[type="text"] {
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    min-width: 150px;
+  }
+  
+  .games-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .game-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 4px solid transparent;
+    transition: transform 0.15s ease-in-out;
+  }
+  .game-card:hover {
+    transform: scale(1.03);
+  }
+  .game-card.green {
+    border-color: #4CAF50;
+  }
+  .game-card.yellow {
+    border-color: #FFC107;
+  }
+  .game-card.orange {
+    border-color: #FF5722;
+  }
+  .game-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+  .game-info {
+    padding: 15px 18px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .game-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #222;
+  }
+  .game-details {
+    font-size: 0.9em;
+    line-height: 1.3;
+    color: #555;
+  }
+  .difficulty {
+    margin-top: 12px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<h1>Menu Giochi da Tavolo</h1>
+
+<div class="legend">
+  <div><span class="dot green"></span> Semplice</div>
+  <div><span class="dot yellow"></span> Medio</div>
+  <div><span class="dot orange"></span> Avanzato</div>
+</div>
+
+<div class="filters">
+  <label for="filterName">Cerca nome:</label>
+  <input type="text" id="filterName" placeholder="Cerca gioco..." />
+
+  <label for="filterDifficulty">Difficoltà:</label>
+  <select id="filterDifficulty">
+    <option value="">Tutte</option>
+    <option value="Semplice">Semplice</option>
+    <option value="Medio">Medio</option>
+    <option value="Avanzato">Avanzato</option>
+  </select>
+
+  <label for="filterCategory">Categoria:</label>
+  <select id="filterCategory">
+    <option value="">Tutte</option>
+  </select>
+</div>
+
+<div class="games-container" id="gamesContainer">
+  <!-- Cards generate here -->
+</div>
+
+<script>
+const games = [
+  {
+    titolo: "5 Minute Dungeon",
+    difficolta: "Semplice",
+    categoria: "Collaborativo",
+    lingua: "ITA",
+    anno: "2022",
+    giocatori: "2–5",
+    durata: "5–30 min",
+    tipo: "Party game / Cooperativo",
+    descrizione: "Gioco in tempo reale, gestione mano, ruoli asimmetrici",
+    img: "https://arcticboardgames.ca/wp-content/uploads/2023/02/5-minute-dungeon.jpg"
+  },
+  {
+    titolo: "7 Wonders Architects",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2021",
+    giocatori: "2–7",
+    durata: "25 min",
+    tipo: "Family / Costruzione meraviglie",
+    descrizione: "Draft semplificato, costruzione struttura, gestione risorse",
+    img: "https://cf.geekdo-images.com/BGtYtHbLgYhYyNMoyOm1RA__original/img/05P7xaW8B4ueCvItryBjO5wVA5s=/0x0/filters:format(jpeg)/pic7416525.jpg"
+  },
+  {
+    titolo: "7 Wonders Duel",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2015",
+    giocatori: "2",
+    durata: "30 min",
+    tipo: "Draft di carte",
+    descrizione: "Draft, set collection, vittoria militare/scientifica",
+    img: "https://cf.geekdo-images.com/zdagMskTF7wJBPjX74XsRw__imagepage/img/HdJ4d4O1P89V4UIhZnL3zoYnjow=/fit-in/900x600/filters:no_upscale():strip_icc()/pic2576399.jpg"
+  },
+  {
+    titolo: "Banditi di Sherwood",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2021",
+    giocatori: "2–4",
+    durata: "30-40 min",
+    tipo: "Family / Push your luck",
+    descrizione: "Draft dadi, colpi simultanei, gestione bottino",
+    img: "https://cf.geekdo-images.com/EKq6DQ2h2Ok3ulMnYLqjtQ__imagepage/img/oMVJ9Pur_2-q4j5Mzh87ge6tYDc=/fit-in/900x600/filters:no_upscale():strip_icc()/pic6168904.jpg"
+  },
+  {
+    titolo: "Beccato",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2007",
+    giocatori: "2–6",
+    durata: "15-25 minuti",
+    tipo: "Carte, Bluff",
+    descrizione: "Bluff, Push Your Luck, Memoria",
+    img: "https://cf.geekdo-images.com/84maAZCDOCt3XaLa___wWQ__imagepage/img/fcftYfRVmpzrbushDdZ7UMmendM=/fit-in/900x600/filters:no_upscale():strip_icc()/pic6222260.jpg"
+  },
+  {
+    titolo: "Calico",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2020",
+    giocatori: "1–4",
+    durata: "30-45 minuti",
+    tipo: "Astratto, Puzzle",
+    descrizione: "Pattern Building, Piazzamento Tessere, Obiettivi",
+    img: "https://cf.geekdo-images.com/qGkU6XsF1448F_A4P8TY5Q__imagepage/img/bYx0eGf8Mf6JOKYAuz2axP2K72U=/fit-in/900x600/filters:no_upscale():strip_icc()/pic8124431.jpg"
+  },
+  {
+    titolo: "Camel Up",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2019",
+    giocatori: "2–8",
+    durata: "30–45 min",
+    tipo: "Family / Betting",
+    descrizione: "Corse cammelli, scommesse, push-your-luck",
+    img: "https://cf.geekdo-images.com/qnR2V3YsW963_JaVznBjsw__imagepagezoom/img/CNDD-v-DQQEsmDCwvFB0SOPjD2A=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic8584959.jpg"
+  },
+  {
+    titolo: "Cartagena",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2000",
+    giocatori: "2–5",
+    durata: "30-45 minuti",
+    tipo: "Famiglia, Corsa",
+    descrizione: "Programmazione, Corsa, Movimento",
+    img: "https://cf.geekdo-images.com/5n39VU8n-aI3HlTFJHdOkQ__imagepage/img/Pi56dxdP2d7GEoA5_pa0OnuVXCg=/fit-in/900x600/filters:no_upscale():strip_icc()/pic3529183.jpg"
+  },
+  {
+    titolo: "Ciarlatani di Quedlinburgo",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2018",
+    giocatori: "2–4",
+    durata: "45 min",
+    tipo: "Family / Push your luck",
+    descrizione: "Rondella, selezione ingredienti, costruzione pozioni",
+    img: "https://cf.geekdo-images.com/Z_NBuFOqEQQlLBhPyRWpqQ__imagepage/img/elBXaSKEvuMphBg1mmNIQhEBUCU=/fit-in/900x600/filters:no_upscale():strip_icc()/pic4630593.jpg"
+  },
+  {
+    titolo: "Citadels",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2021",
+    giocatori: "2–8",
+    durata: "30–60 min",
+    tipo: "Costruzione città / Draft ruoli",
+    descrizione: "Draft ruoli segreti, costruzione edifici, bluff",
+    img: "https://cf.geekdo-images.com/sHd0jkZZLDgixHjAXtn7kA__imagepage/img/BAc4tOD4A_Bu2QJ2lR_B_zmelto=/fit-in/900x600/filters:no_upscale():strip_icc()/pic3119514.jpg"
+  },
+  {
+    titolo: "Claim",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2020",
+    giocatori: "2",
+    durata: "25 min",
+    tipo: "Carte / Duello",
+    descrizione: "Trick-taking a due fasi, poteri asimmetrici",
+    img: "https://cf.geekdo-images.com/XTnU0KdAC1l4WxxGr46F-g__imagepage/img/0A-OrL5xG-XB2ZCvfin9xnLbMh8=/fit-in/900x600/filters:no_upscale():strip_icc()/pic3714302.jpg"
+  },
+  {
+    titolo: "Claim 2",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2022",
+    giocatori: "2",
+    durata: "25 min",
+    tipo: "Carte / Duello",
+    descrizione: "Compatibile con Claim 1, nuove fazioni e poteri",
+    img: "https://cf.geekdo-images.com/lLKWqJzEFSlOU8Cs5G54dg__imagepage/img/io-Xcf0WKpz8RaQDUv0a133OKeU=/fit-in/900x600/filters:no_upscale():strip_icc()/pic4059108.jpg"
+  },
+  {
+    titolo: "Clank",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2016",
+    giocatori: "2–4",
+    durata: "30-60 min",
+    tipo: "Avventura",
+    descrizione: "Deck building, push your luck",
+    img: "https://cf.geekdo-images.com/DPjV1iI0ygo5Bl3XLNRiIg__imagepage/img/R9z8w4GndbY-r3fG_LK1LvBvLc0=/fit-in/900x600/filters:no_upscale():strip_icc()/pic4449526.jpg"
+  },
+  {
+    titolo: "Codex Naturalis",
+    difficolta: "Semplice",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2021",
+    giocatori: "1–4",
+    durata: "20-30 min",
+    tipo: "Puzzle / Costruzione pattern",
+    descrizione: "Piazzamento carte con vincoli, obiettivi privati e pubblici",
+    img: "https://cf.geekdo-images.com/0I7U0tz-RgpIFWWco5FKLA__imagepage/img/C6EbYTz-0S3pJ3zmQutJGY6ihGo=/fit-in/900x600/filters:no_upscale():strip_icc()/pic5612161.png"
+  },
+  {
+    titolo: "Coloni di Catan",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "1995",
+    giocatori: "3–4",
+    durata: "60-90 minuti",
+    tipo: "Economico, Strategia",
+    descrizione: "Scambio, Costruzione, Tiro Dadi",
+    img: "https://cf.geekdo-images.com/PyUol9QxBnZQCJqZI6bmSA__imagepage/img/tDdC3V3b26mJyPSyQI-_e2_E3Ik=/fit-in/900x600/filters:no_upscale():strip_icc()/pic8632666.png"
+  },
+  {
+    titolo: "Con me nella Tomba",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2014",
+    giocatori: "2–4",
+    durata: "20-30 minuti",
+    tipo: "Carte, Deduttivo",
+    descrizione: "Bluff, Deduzione, Memoria",
+    img: "https://cf.geekdo-images.com/RiQHrBeuup_mr257Ala5fQ__imagepage/img/l3YXP1R0BRJ6Z3nLCHKGHiMcCqE=/fit-in/900x600/filters:no_upscale():strip_icc()/pic7077417.jpg"
+  },
+  {
+    titolo: "Concordia",
+    difficolta: "Avanzato",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2013",
+    giocatori: "2–5",
+    durata: "90 min",
+    tipo: "German-style",
+    descrizione: "Piazzamento lavoratori, raccolta risorse, rete",
+    img: "https://cf.geekdo-images.com/CzwSm8i7tkLz6cBnrILZBg__imagepage/img/wLKrQnpz-Udm23hoDBRjyKgHEvo=/fit-in/900x600/filters:no_upscale():strip_icc()/pic3453267.jpg"
+  },
+  {
+    titolo: "Corsari",
+    difficolta: "Medio",
+    categoria: "Competitivo",
+    lingua: "ITA",
+    anno: "2009",
+    giocatori: "2–5",
+    durata: "20-30 minuti",
+    tipo: "Carte, Bluff",
+    descrizione: "Bluff, Votazione, Raccolta Set",
+    img: "https://cf.geekdo-images.com/R1fBNwCD4sZYTbHKwxFJyQ__imagepage/img/YhDypkXoW5yFYVHlms9TZyTOjoA=/fit-in/900x600/filters:no_upscale():strip_icc()/pic4723755.jpg"
+  }
+];
+
+// Populate category filter dynamically
+const categorySet = new Set();
+games.forEach(g => categorySet.add(g.categoria));
+const categoryFilter = document.getElementById('filterCategory');
+categorySet.forEach(cat => {
+  const opt = document.createElement('option');
+  opt.value = cat;
+  opt.textContent = cat;
+  categoryFilter.appendChild(opt);
+});
+
+// Map difficulty to color class
+const difficultyClass = {
+  "Semplice": "green",
+  "Medio": "yellow",
+  "Avanzato": "orange"
+};
+
+function createGameCard(game) {
+  const card = document.createElement('div');
+  card.className = `game-card ${difficultyClass[game.difficolta]}`;
+
+  card.innerHTML = `
+    <img src="${game.img}" alt="Copertina ${game.titolo}" class="game-image" />
+    <div class="game-info">
+      <div>
+        <div class="game-title">${game.titolo}</div>
+        <div class="game-details">
+          <b>Categoria:</b> ${game.categoria}<br/>
+          <b>Nr. giocatori:</b> ${game.giocatori}<br/>
+          <b>Durata:</b> ${game.durata}<br/>
+          <b>Lingua:</b> ${game.lingua}<br/>
+          <b>Tipo:</b> ${game.tipo}<br/>
+          <b>Anno:</b> ${game.anno}<br/>
+          <i>${game.descrizione}</i>
+        </div>
+      </div>
+      <div class="difficulty">Difficoltà: <span class="dot ${difficultyClass[game.difficolta]}"></span> ${game.difficolta}</div>
+    </div>
+  `;
+  return card;
+}
+
+function filterGames() {
+  const nameFilter = document.getElementById('filterName').value.toLowerCase();
+  const diffFilter = document.getElementById('filterDifficulty').value;
+  const catFilter = document.getElementById('filterCategory').value;
+
+  const container = document.getElementById('gamesContainer');
+  container.innerHTML = '';
+
+  const filteredGames = games.filter(g => {
+    return (
+      (g.titolo.toLowerCase().includes(nameFilter)) &&
+      (diffFilter === "" || g.difficolta === diffFilter) &&
+      (catFilter === "" || g.categoria === catFilter)
+    );
+  });
+
+  if (filteredGames.length === 0) {
+    container.innerHTML = '<p style="text-align:center; font-weight:bold;">Nessun gioco trovato.</p>';
+    return;
+  }
+
+  filteredGames.forEach(game => {
+    container.appendChild(createGameCard(game));
+  });
+}
+
+// Init
+filterGames();
+
+// Event listeners
+document.getElementById('filterName').addEventListener('input', filterGames);
+document.getElementById('filterDifficulty').addEventListener('change', filterGames);
+document.getElementById('filterCategory').addEventListener('change', filterGames);
+
+</script>
+
+</body>
+</html>
