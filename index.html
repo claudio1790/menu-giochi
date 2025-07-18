@@ -148,6 +148,11 @@
   <option value="7+">7+</option>
 </select>
 
+ <label for="filterDuration">Durata:</label>
+    <select id="filterDuration">
+      <option value="">Tutte</option>
+    </select>
+
   <label for="filterCategory">Categoria:</label>
   <select id="filterCategory">
     <option value="">Tutte</option>
@@ -1143,6 +1148,22 @@ categorySet.forEach(cat => {
   opt.value = cat;
   opt.textContent = cat;
   categoryFilter.appendChild(opt);
+const playersSet = new Set();
+    games.forEach(g => playersSet.add(g.giocatori));
+const playersFilter = document.getElementById('filterPlayers');
+    playersSet.forEach(num => {
+      const opt = document.createElement('option');
+      opt.value = num;
+      opt.textContent = num;
+      playersFilter.appendChild(opt);
+const durationSet = new Set();
+    games.forEach(g => durationSet.add(g.durata));
+    const durationFilter = document.getElementById('filterDuration');
+    durationSet.forEach(dur => {
+      const opt = document.createElement('option');
+      opt.value = dur;
+      opt.textContent = dur;
+      durationFilter.appendChild(opt);
 });
 
 // Map difficulty to color class
@@ -1210,6 +1231,8 @@ filterGames();
 document.getElementById('filterName').addEventListener('input', filterGames);
 document.getElementById('filterDifficulty').addEventListener('change', filterGames);
 document.getElementById('filterCategory').addEventListener('change', filterGames);
+document.getElementById('filterPlayers').addEventListener('change', filterGames);
+document.getElementById('filterDuration').addEventListener('change', filterGames);
 
 </script>
 
