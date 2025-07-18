@@ -1148,22 +1148,28 @@ categorySet.forEach(cat => {
   opt.value = cat;
   opt.textContent = cat;
   categoryFilter.appendChild(opt);
+});
+
+// Populate players filter dynamically
 const playersSet = new Set();
-    games.forEach(g => playersSet.add(g.giocatori));
-const playersFilter = document.getElementById('filterPlayers');
-    playersSet.forEach(num => {
-      const opt = document.createElement('option');
-      opt.value = num;
-      opt.textContent = num;
-      playersFilter.appendChild(opt);
+games.forEach(g => playersSet.add(g.giocatori));
+const playersFilter = document.getElementById('players-filter');
+playersSet.forEach(num => {
+  const opt = document.createElement('option');
+  opt.value = num;
+  opt.textContent = num;
+  playersFilter.appendChild(opt);
+});
+
+// Populate duration filter dynamically
 const durationSet = new Set();
-    games.forEach(g => durationSet.add(g.durata));
-    const durationFilter = document.getElementById('filterDuration');
-    durationSet.forEach(dur => {
-      const opt = document.createElement('option');
-      opt.value = dur;
-      opt.textContent = dur;
-      durationFilter.appendChild(opt);
+games.forEach(g => durationSet.add(g.durata));
+const durationFilter = document.getElementById('filterDuration');
+durationSet.forEach(dur => {
+  const opt = document.createElement('option');
+  opt.value = dur;
+  opt.textContent = dur;
+  durationFilter.appendChild(opt);
 });
 
 // Map difficulty to color class
@@ -1202,15 +1208,19 @@ function filterGames() {
   const nameFilter = document.getElementById('filterName').value.toLowerCase();
   const diffFilter = document.getElementById('filterDifficulty').value;
   const catFilter = document.getElementById('filterCategory').value;
+  const playersFilterVal = document.getElementById('players-filter').value;
+  const durationFilterVal = document.getElementById('filterDuration').value;
 
   const container = document.getElementById('gamesContainer');
   container.innerHTML = '';
 
   const filteredGames = games.filter(g => {
     return (
-      (g.titolo.toLowerCase().includes(nameFilter)) &&
+      g.titolo.toLowerCase().includes(nameFilter) &&
       (diffFilter === "" || g.difficolta === diffFilter) &&
-      (catFilter === "" || g.categoria === catFilter)
+      (catFilter === "" || g.categoria === catFilter) &&
+      (playersFilterVal === "" || g.giocatori === playersFilterVal) &&
+      (durationFilterVal === "" || g.durata === durationFilterVal)
     );
   });
 
