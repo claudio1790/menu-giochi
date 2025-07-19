@@ -46,11 +46,12 @@
     .dot.orange { background-color: #FF5722; }
 
     .search-filter {
+      max-width: 900px;
+      margin: 0 auto 30px auto;
       display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
       justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-      gap: 10px;
     }
 
     .filters {
@@ -145,13 +146,13 @@
 </div>
 
 <div class="search-filter">
-  <input type="text" id="filterName" placeholder="Scrivi il nome..." />
+  
+  <label for="filterName"></label>
+  <input type="text" id="filterName" placeholder="Cerca gioco..." />
 </div>
 
 <div class="filters">
-  <label for="filterName"></label>
-  <input type="text" id="filterName" placeholder="Cerca gioco..." />
-
+ 
   <label for="filterDifficulty">Difficoltà:</label>
   <select id="filterDifficulty">
     <option value="">Tutte</option>
