@@ -157,7 +157,15 @@
 </div>
 
 <div class="filters">
- 
+
+  <label for="filterDuration">Durata:</label>
+  <select id="filterDuration">
+    <option value="">Tutte</option>
+    <option value="breve">Breve (&le; 30 min)</option>
+    <option value="medio">Medio (31-60 min)</option>
+    <option value="lungo">Lungo (&gt; 60 min)</option>
+  </select>
+  
   <label for="filterDifficulty">Difficoltà:</label>
   <select id="filterDifficulty">
     <option value="">Tutte</option>
@@ -187,13 +195,6 @@
     <option value="10">10</option>
   </select>
 
-  <label for="filterDuration">Durata:</label>
-  <select id="filterDuration">
-    <option value="">Tutte</option>
-    <option value="breve">Breve (&le; 30 min)</option>
-    <option value="medio">Medio (31-60 min)</option>
-    <option value="lungo">Lungo (&gt; 60 min)</option>
-  </select>
 </div>
 
 <div class="games-container" id="gamesContainer">
