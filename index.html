@@ -45,6 +45,14 @@
     .dot.yellow { background-color: #FFC107; }
     .dot.orange { background-color: #FF5722; }
 
+    .search-filter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
     .filters {
       max-width: 900px;
       margin: 0 auto 30px auto;
@@ -134,6 +142,10 @@
   <div><span class="dot green"></span> Semplice</div>
   <div><span class="dot yellow"></span> Medio</div>
   <div><span class="dot orange"></span> Avanzato</div>
+</div>
+
+<div class="search-filter">
+  <input type="text" id="filterName" placeholder="Scrivi il nome..." />
 </div>
 
 <div class="filters">
