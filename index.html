@@ -204,7 +204,7 @@
 const games = [
   {
     titolo: "5 Minute Dungeon",
-    descrizione: "Gioco cooperativo in tempo reale, frenetico e divertente, in cui i giocatori devono superare dungeon giocando carte simbolo per affrontare ostacoli, nemici e boss… in soli 5 minuti."
+    descrizione: "Gioco cooperativo in tempo reale, frenetico e divertente, in cui i giocatori devono superare dungeon giocando carte simbolo per affrontare ostacoli, nemici e boss… in soli 5 minuti.",
     difficolta: "Semplice",
     categoria: "Collaborativo",
     lingua: "ITA",
@@ -212,7 +212,7 @@ const games = [
     giocatori: "2–5",
     durata: "5–30 min",
     tipo: "Party game / Cooperativo",
-    descrizione: "Gioco in tempo reale, gestione mano, ruoli asimmetrici",
+    meccaniche: "Gioco in tempo reale, gestione mano, ruoli asimmetrici",
     img: "https://arcticboardgames.ca/wp-content/uploads/2023/02/5-minute-dungeon.jpg"
   },
   {
@@ -1226,7 +1226,7 @@ function createGameCard(game) {
     <div class="game-info">
       <div>
         <div class="game-title">${game.titolo}</div>
-        <div class="game-title">${game.sottotitolo}</div>
+        <div class="game-subtitle">${game.descrizione}</div>
         <div class="game-details"><strong>Categoria:</strong> ${game.categoria}</div>
         <div class="game-details"><strong>Giocatori:</strong> ${game.giocatori}</div>
         <div class="game-details"><strong>Durata:</strong> ${game.durata}</div>
