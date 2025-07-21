@@ -45,6 +45,17 @@
     .dot.yellow { background-color: #FFC107; }
     .dot.orange { background-color: #FF5722; }
 
+    .game-description-extended {
+      font-size: 0.9em;
+      color: #333;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      transition: max-height 0.3s ease;
+      overflow: hidden;
+      max-height: 0;
+      padding: 0 10px;
+    }
+    
     .search-filter {
       max-width: 900px;
       margin: 0 auto 30px auto;
@@ -1234,8 +1245,20 @@ function createGameCard(game) {
         <div class="game-details"><em>${game.descrizione}</em></div>
       </div>
       <div class="difficulty">Difficoltà: ${game.difficolta}</div>
+      
+      <div class="game-description-extended" style="display:none; margin-top:10px; border-top:1px solid #ccc; padding-top:8px;">
+      ${game.descrizioneEstesa || "Nessuna descrizione estesa disponibile."}
     </div>
   `;
+  
+  card.addEventListener('click', () => {
+  const desc = card.querySelector('.game-description-extended');
+  if (desc.style.display === 'none') {
+    desc.style.display = 'block';
+  } else {
+    desc.style.display = 'none';
+  }
+});
   return card;
 }
 
