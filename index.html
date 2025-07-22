@@ -1,81 +1,68 @@
-<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Giochi in Tavola</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elenco Giochi da Tavolo</title>
   <style>
     body {
-      font-family: "Poppins", sans-serif;
-      background: #f0f4f8;
-      margin: 20px;
-      color: #333;
-    }
-    h1 {
-      text-align: flex-start;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      text-align: flex-start;
-      max-width: 600px;
-      margin: 0 auto 25px auto;
-      font-size: 1em;
-      color: #666;
-    }
-    .legend {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 25px;
-      gap: 30px;
-      font-weight: bold;
-    }
-    .legend div {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .dot.green { background-color: #4CAF50; }
-    .dot.yellow { background-color: #FFC107; }
-    .dot.orange { background-color: #FF5722; }
-
-    .search-filter {
-      max-width: 900px;
-      margin: 0 auto 30px auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: flex-start;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
     }
     .filters {
-      max-width: 900px;
-      margin: 0 auto 30px auto;
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
-      justify-content: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
     }
-    .filters label {
-      font-weight: 600;
-      margin-right: 6px;
+    select {
+      padding: 5px;
+      font-size: 16px;
     }
-    .search-filter select, .search-filter input[type="text"] {
-      padding: 8px 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      min-width: 150px;
+    .games-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
     }
-    .filters select, .filters input[type="text"] {
-      padding: 6px 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      min-width: 150px;
+    .game-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      width: 300px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .game-card:hover {
+      transform: scale(1.02);
+    }
+    .game-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .game-info {
+      padding: 15px;
+    }
+    .game-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .game-subtitle {
+      font-style: italic;
+      color: #666;
+      font-size: 0.95em;
+      margin-bottom: 6px;
+    }
+    .game-details {
+      margin: 4px 0;
+    }
+    .difficulty {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
     }
     .game-description-extended {
       max-height: 0;
@@ -89,127 +76,19 @@
       margin-top: 10px;
       border-radius: 4px;
     }
-    .games-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .game-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      border: 4px solid transparent;
-      transition: transform 0.15s ease-in-out;
-    }
-    .game-card:hover {
-      transform: scale(1.03);
-    }
-    .game-card.green {
-      border-color: #4CAF50;
-    }
-    .game-card.yellow {
-      border-color: #FFC107;
-    }
-    .game-card.orange {
-      border-color: #FF5722;
-    }
-    .game-image {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-    }
-    .game-info {
-      padding: 15px 18px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .game-title {
-      font-size: 1.2em;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #222;
-    }
-    .game-details {
-      font-size: 0.9em;
-      line-height: 1.3;
-      color: #555;
-    }
-    .difficulty {
-      margin-top: 12px;
-      font-weight: 700;
+    .game-description-extended.show {
+      max-height: 300px;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Giochi in Tavola</h1>
-  <p class="subtitle">
-    Usa i filtri per trovare il gioco che ti ispira, vieni a chiederlo lasciando un documento e inizia a giocare! Se hai dubbi o ti servono consigli, siamo qui per aiutarti.
-  </p>
-</body>
-</html>
-
-<div class="legend">
-  <div><span class="dot green"></span> Semplice</div>
-  <div><span class="dot yellow"></span> Medio</div>
-  <div><span class="dot orange"></span> Avanzato</div>
-</div>
-
-<div class="search-filter">
-  
-  <input type="text" id="filterName" placeholder="Cerca gioco..." />
-</div>
-
-<div class="filters">
-
-  <label for="filterDuration">Durata:</label>
-  <select id="filterDuration">
-    <option value="">Tutte</option>
-    <option value="breve">Breve (&le; 30 min)</option>
-    <option value="medio">Medio (31-60 min)</option>
-    <option value="lungo">Lungo (&gt; 60 min)</option>
-  </select>
-  
-  <label for="filterDifficulty">Difficoltà:</label>
-  <select id="filterDifficulty">
-    <option value="">Tutte</option>
-    <option value="Semplice">Semplice</option>
-    <option value="Medio">Medio</option>
-    <option value="Avanzato">Avanzato</option>
-  </select>
-
-  <label for="filterCategory">Categoria:</label>
-  <select id="filterCategory">
-    <option value="">Tutte</option>
-  </select>
-
-  <label for="filterPlayers">Numero giocatori:</label>
-  <select id="filterPlayers">
-    <option value="">Tutti</option>
-    <!-- Opzioni 1-10 -->
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-  </select>
-
-</div>
-
-<div class="games-container" id="gamesContainer">
-  <!-- Cards generate qui -->
-</div>
+  <div class="filters">
+    <select id="filterCategory">
+      <option value="">Tutte le categorie</option>
+    </select>
+  </div>
+  <div class="games-container" id="gamesContainer"></div>
 
 <script>
 const games = [
@@ -1212,162 +1091,59 @@ const games = [
 }
 ];
 
-// Popola categorie filtro
-function populateCategories() {
-  const select = document.getElementById('filterCategory');
-  const categories = [...new Set(games.map(g => g.categoria))].sort();
-  categories.forEach(cat => {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    select.appendChild(option);
-  });
-}
+const gamesContainer = document.getElementById("gamesContainer");
 
-// Crea card gioco
-function createGameCard(game) {
-  const card = document.createElement('div');
-  card.classList.add('game-card');
-  if(game.difficolta === "Semplice") card.classList.add('green');
-  else if(game.difficolta === "Medio") card.classList.add('yellow');
-  else if(game.difficolta === "Avanzato") card.classList.add('orange');
+    function createGameCard(game) {
+      const card = document.createElement("div");
+      card.className = "game-card";
+      card.innerHTML = `
+        <img class="game-image" src="${game.img}" alt="${game.titolo}">
+        <div class="game-info">
+          <div>
+            <div class="game-title">${game.titolo}</div>
+            <div class="game-subtitle">${game.descrizione}</div>
+            <div class="game-details"><strong>Categoria:</strong> ${game.categoria}</div>
+            <div class="game-details"><strong>Giocatori:</strong> ${game.giocatori}</div>
+            <div class="game-details"><strong>Durata:</strong> ${game.durata}</div>
+            <div class="game-details"><strong>Anno:</strong> ${game.anno}</div>
+            <div class="game-details"><strong>Lingua:</strong> ${game.lingua}</div>
+            <div class="game-details"><strong>Tipo:</strong> ${game.tipo}</div>
+          </div>
+          <div class="difficulty">Difficoltà: ${game.difficolta}</div>
+          <div class="game-description-extended">${game.descrizioneEstesa || ""}</div>
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        const desc = card.querySelector('.game-description-extended');
+        desc.classList.toggle('show');
+      });
+      return card;
+    }
 
-  card.innerHTML = `
-    <img class="game-image" src="${game.img}" alt="${game.titolo}">
-    <div class="game-info">
-      <div>
-        <div class="game-title">${game.titolo}</div>
-        <div class="game-description-extended">${game.descrizioneEstesa || ""}</div>
-        <div class="game-details"><strong>Categoria:</strong> ${game.categoria}</div>
-        <div class="game-details"><strong>Giocatori:</strong> ${game.giocatori}</div>
-        <div class="game-details"><strong>Durata:</strong> ${game.durata}</div>
-        <div class="game-details"><strong>Anno:</strong> ${game.anno}</div>
-        <div class="game-details"><strong>Lingua:</strong> ${game.lingua}</div>
-        <div class="game-details"><strong>Tipo:</strong> ${game.tipo}</div>
-        <div class="game-details"><em>${game.descrizione}</em></div>
-      </div>
-      <div class="difficulty">Difficoltà: ${game.difficolta}</div>
-    </div>
-  `;
-  return card;
-}
+    function renderGames(gamesList) {
+      gamesContainer.innerHTML = "";
+      gamesList.forEach(game => {
+        gamesContainer.appendChild(createGameCard(game));
+      });
+    }
 
-card.addEventListener('click', () => {
-  const desc = card.querySelector('.game-description-extended');
-  desc.classList.toggle('show');
-});
+    const categorySet = new Set();
+    games.forEach(g => categorySet.add(g.categoria));
+    const categoryFilter = document.getElementById('filterCategory');
+    categorySet.forEach(cat => {
+      const opt = document.createElement('option');
+      opt.value = cat;
+      opt.textContent = cat;
+      categoryFilter.appendChild(opt);
+    });
 
-// Funzione per capire se un numero di giocatori è nel range del gioco
-function playersMatch(gamePlayers, selectedPlayers) {
-  // gamePlayers es: "2–5", "1–4", "2", "3–6"
-  // selectedPlayers è un numero stringa "3"
-  if (!selectedPlayers) return true;
+    categoryFilter.addEventListener('change', () => {
+      const selected = categoryFilter.value;
+      const filtered = selected ? games.filter(g => g.categoria === selected) : games;
+      renderGames(filtered);
+    });
 
-  const selNum = parseInt(selectedPlayers, 10);
-  // Rimuovo spazi e sostituisco trattini lunghi/dash con -
-  const cleaned = gamePlayers.replace(/\s+/g, '').replace(/–|—/g, '-');
-
-  // Se è un singolo numero
-  if (/^\d+$/.test(cleaned)) {
-    return selNum === parseInt(cleaned, 10);
-  }
-
-  // Se è un range (es. "2-5")
-  const parts = cleaned.split('-').map(n => parseInt(n, 10));
-  if(parts.length === 2) {
-    const [min, max] = parts;
-    return selNum >= min && selNum <= max;
-  }
-
-  // Se formato non previsto, considera no match
-  return false;
-}
-
-// Funzione per estrarre durata minima e massima in minuti
-function parseDuration(durationStr) {
-  // Normalizzo stringa
-  const d = durationStr.toLowerCase().replace('minuti', 'min').replace('minuto', 'min').replace(/\s+/g,'').replace(/–|—/g, '-');
-  
-  // Caso singolo numero "25min"
-  if (/^\d+min$/.test(d)) {
-    const val = parseInt(d.replace('min',''),10);
-    return {min: val, max: val};
-  }
-
-  // Caso range tipo "5-30min"
-  const match = d.match(/^(\d+)-(\d+)min$/);
-  if(match) {
-    return {min: parseInt(match[1],10), max: parseInt(match[2],10)};
-  }
-
-  // Caso range con spazio, es "30-40 min" con spazio? (già tolto sopra)
-  // Non trovato, ritorna null per fallback
-  return null;
-}
-
-// Funzione per controllare se la durata corrisponde alla categoria breve/medio/lungo
-function durationMatch(gameDuration, selectedDuration) {
-  if(!selectedDuration) return true;
-
-  const dur = parseDuration(gameDuration);
-  if(!dur) return false;
-
-  switch(selectedDuration) {
-    case 'breve':
-      return dur.max <= 30;
-    case 'medio':
-      return dur.min >= 31 && dur.max <= 60;
-    case 'lungo':
-      return dur.min > 60;
-    default:
-      return true;
-  }
-}
-
-// Funzione per applicare i filtri
-function applyFilters() {
-  const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
-  const diffFilter = document.getElementById('filterDifficulty').value;
-  const catFilter = document.getElementById('filterCategory').value;
-  const playersFilter = document.getElementById('filterPlayers').value;
-  const durationFilter = document.getElementById('filterDuration').value;
-
-  const container = document.getElementById('gamesContainer');
-  container.innerHTML = '';
-
-  const filtered = games.filter(game => {
-    const titoloLower = game.titolo.toLowerCase();
-
-    if(nameFilter && !titoloLower.includes(nameFilter)) return false;
-    if(diffFilter && game.difficolta !== diffFilter) return false;
-    if(catFilter && game.categoria !== catFilter) return false;
-    if(playersFilter && !playersMatch(game.giocatori, playersFilter)) return false;
-    if(durationFilter && !durationMatch(game.durata, durationFilter)) return false;
-
-    return true;
-  });
-
-  if(filtered.length === 0) {
-    container.innerHTML = '<p style="text-align:center; font-style:italic; color:#666;">Nessun gioco corrisponde ai filtri selezionati.</p>';
-    return;
-  }
-
-  filtered.forEach(game => {
-    container.appendChild(createGameCard(game));
-  });
-}
-
-// Event listeners
-document.getElementById('filterName').addEventListener('input', applyFilters);
-document.getElementById('filterDifficulty').addEventListener('change', applyFilters);
-document.getElementById('filterCategory').addEventListener('change', applyFilters);
-document.getElementById('filterPlayers').addEventListener('change', applyFilters);
-document.getElementById('filterDuration').addEventListener('change', applyFilters);
-
-// Inizializza pagina
-populateCategories();
-applyFilters();
-</script>
-
+    renderGames(games);
+  </script>
 </body>
 </html>
