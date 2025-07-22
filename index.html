@@ -134,7 +134,23 @@
       margin-top: 12px;
       font-weight: 700;
     }
-    .toggle-description-btn {
+    .game-description-extended {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      font-size: 0.9em;
+      color: #444;
+      background-color: #f9f9f9;
+      padding: 0 10px;
+      border-top: 1px solid #ddd;
+      margin-top: 10px;
+      border-radius: 4px;
+    }
+    .game-description-extended.show {
+      max-height: 300px;
+      padding: 10px;
+    }
+   .toggle-description-btn {
       margin-top: 10px;
       background-color: #007bff;
       color: #fff;
