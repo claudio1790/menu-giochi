@@ -173,64 +173,60 @@
   <p class="subtitle">
     Usa i filtri per trovare il gioco che ti ispira, vieni a chiederlo lasciando un documento e inizia a giocare! Se hai dubbi o ti servono consigli, siamo qui per aiutarti.
   </p>
+
+  <div class="legend">
+    <div><span class="dot green"></span> Semplice</div>
+    <div><span class="dot yellow"></span> Medio</div>
+    <div><span class="dot orange"></span> Avanzato</div>
+  </div>
+
+  <div class="search-filter">
+    <input type="text" id="filterName" placeholder="Cerca gioco..." />
+  </div>
+
+  <div class="filters">
+    <label for="filterDuration">Durata:</label>
+    <select id="filterDuration">
+      <option value="">Tutte</option>
+      <option value="breve">Breve (&le; 30 min)</option>
+      <option value="medio">Medio (31-60 min)</option>
+      <option value="lungo">Lungo (&gt; 60 min)</option>
+    </select>
+    
+    <label for="filterDifficulty">Difficoltà:</label>
+    <select id="filterDifficulty">
+      <option value="">Tutte</option>
+      <option value="Semplice">Semplice</option>
+      <option value="Medio">Medio</option>
+      <option value="Avanzato">Avanzato</option>
+    </select>
+
+    <label for="filterCategory">Categoria:</label>
+    <select id="filterCategory">
+      <option value="">Tutte</option>
+    </select>
+
+    <label for="filterPlayers">Numero giocatori:</label>
+    <select id="filterPlayers">
+      <option value="">Tutti</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+  </div>
+
+  <div class="games-container" id="gamesContainer">
+    <!-- Cards generate qui -->
+  </div>
 </body>
 </html>
-
-<div class="legend">
-  <div><span class="dot green"></span> Semplice</div>
-  <div><span class="dot yellow"></span> Medio</div>
-  <div><span class="dot orange"></span> Avanzato</div>
-</div>
-
-<div class="search-filter">
-  
-  <input type="text" id="filterName" placeholder="Cerca gioco..." />
-</div>
-
-<div class="filters">
-
-  <label for="filterDuration">Durata:</label>
-  <select id="filterDuration">
-    <option value="">Tutte</option>
-    <option value="breve">Breve (&le; 30 min)</option>
-    <option value="medio">Medio (31-60 min)</option>
-    <option value="lungo">Lungo (&gt; 60 min)</option>
-  </select>
-  
-  <label for="filterDifficulty">Difficoltà:</label>
-  <select id="filterDifficulty">
-    <option value="">Tutte</option>
-    <option value="Semplice">Semplice</option>
-    <option value="Medio">Medio</option>
-    <option value="Avanzato">Avanzato</option>
-  </select>
-
-  <label for="filterCategory">Categoria:</label>
-  <select id="filterCategory">
-    <option value="">Tutte</option>
-  </select>
-
-  <label for="filterPlayers">Numero giocatori:</label>
-  <select id="filterPlayers">
-    <option value="">Tutti</option>
-    <!-- Opzioni 1-10 -->
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-  </select>
-
-</div>
-
-<div class="games-container" id="gamesContainer">
-  <!-- Cards generate qui -->
-</div>
 
 <script>
 const games = [
