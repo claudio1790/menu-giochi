@@ -134,6 +134,22 @@
       margin-top: 12px;
       font-weight: 700;
     }
+    .toggle-description-btn {
+      margin-top: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .toggle-description-btn:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -248,6 +264,7 @@ const games = [
     durata: "30-40 min",
     tipo: "Family / Push your luck",
     descrizione: "Draft dadi, colpi simultanei, gestione bottino",
+    descrizioneEstesa: "In questo gioco spensierato e rapido, i giocatori cercano di accumulare il bottino migliore evitando le trappole e bluffando gli avversari.",
     img: "https://cf.geekdo-images.com/EKq6DQ2h2Ok3ulMnYLqjtQ__imagepage/img/oMVJ9Pur_2-q4j5Mzh87ge6tYDc=/fit-in/900x600/filters:no_upscale():strip_icc()/pic6168904.jpg"
   },
   {
@@ -1234,8 +1251,18 @@ function createGameCard(game) {
         <div class="game-details"><em>${game.descrizione}</em></div>
       </div>
       <div class="difficulty">Difficoltà: ${game.difficolta}</div>
+      <button class="toggle-description-btn">+</button>
+      <div class="game-description-extended">${game.descrizioneEstesa || ""}</div>
     </div>
   `;
+  const toggleBtn = card.querySelector('.toggle-description-btn');
+  const extendedDesc = card.querySelector('.game-description-extended');
+
+   toggleBtn.addEventListener('click', (e) => {
+   e.stopPropagation(); // Previene altri click sulla card
+   extendedDesc.classList.toggle('show');
+   toggleBtn.textContent = extendedDesc.classList.contains('show') ? '−' : '+';
+});
   return card;
 }
 
