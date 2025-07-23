@@ -1395,6 +1395,31 @@ function parseDuration(durationStr) {
   return null;
 }
 
+function filtraEGenera() {
+  const nome = document.getElementById("filterName").value.toLowerCase();
+  const durata = document.getElementById("filterDuration").value;
+  const difficolta = document.getElementById("filterDifficulty").value;
+  const categoria = document.getElementById("filterCategory").value;
+  const giocatori = document.getElementById("filterPlayers").value;
+
+  const giochiFiltrati = giochi.filter(game => {
+    const matchTitolo = !nome || game.titolo.toLowerCase().includes(nome);
+    const matchDurata = !durata || game.durata.toLowerCase().includes(durata);
+    const matchDifficolta = !difficolta || game.difficolta === difficolta;
+    const matchCategoria = !categoria || game.categoria === categoria;
+    const matchGiocatori = !giocatori || game.giocatori.includes(giocatori);
+    return matchTitolo && matchDurata && matchDifficolta && matchCategoria && matchGiocatori;
+  });
+
+  generaCard(giochiFiltrati);
+}
+
+["filterName", "filterDuration", "filterDifficulty", "filterCategory", "filterPlayers"].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener("input", filtraEGenera);
+  el.addEventListener("change", filtraEGenera);
+});
+
 // Funzione per controllare se la durata corrisponde alla categoria breve/medio/lungo
 function durationMatch(gameDuration, selectedDuration) {
   if(!selectedDuration) return true;
@@ -1457,6 +1482,7 @@ document.getElementById('filterDuration').addEventListener('change', applyFilter
 // Inizializza pagina
 populateCategories();
 applyFilters();
+filtraEGenera();
 </script>
 
 </body>
