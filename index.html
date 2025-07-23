@@ -1310,14 +1310,15 @@ function createGameCard(game) {
     <div class="game-info">
       <div>
         <div class="game-title">${game.titolo}</div>
-        <div class="game-details"><strong>Categoria:</strong> ${game.categoria}</div>
-        <div class="game-details"><strong>Giocatori:</strong> ${game.giocatori}</div>
-        <div class="game-details"><strong>Durata:</strong> ${game.durata}</div>
-        <div class="game-details"><strong>Anno:</strong> ${game.anno}</div>
-        <div class="game-details"><strong>Lingua:</strong> ${game.lingua}</div>
-        <div class="game-details"><strong>Tipo:</strong> ${game.tipo}</div>
-        <div class="game-details"><em>${game.descrizione}</em></div>
-      </div>
+        <div class="game-details">
+          <div><strong>Categoria:</strong> ${game.categoria}</div>
+          <div><strong>Giocatori:</strong> ${game.giocatori}</div>
+          <div><strong>Durata:</strong> ${game.durata}</div>
+          <div><strong>Anno:</strong> ${game.anno}</div>
+          <div><strong>Lingua:</strong> ${game.lingua}</div>
+          <div><strong>Tipo:</strong> ${game.tipo}</div>
+          <div><em>${game.descrizione}</em></div>
+        </div>
       <div class="difficulty">Difficoltà: ${game.difficolta}</div>
       <button class="toggle-description-btn">+</button>
       <div class="game-description-extended">${game.descrizioneEstesa || ""}</div>
