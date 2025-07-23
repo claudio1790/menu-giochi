@@ -1420,7 +1420,7 @@ function filtraEGenera() {
     const matchDurata = durata === "Tutte" || game.durata.toLowerCase().includes(durata);
     const matchDifficolta = difficolta === "Tutte" || game.difficolta === difficolta;
     const matchCategoria = categoria === "Tutte" || game.categoria === categoria;
-    const matchGiocatori = giocatori === "Tutti" || game.giocatori.includes(giocatori);
+    const matchGiocatori = giocatori === "Tutti" || playersMatch(game.giocatori, giocatori);
     return matchTitolo && matchDurata && matchDifficolta && matchCategoria && matchGiocatori;
   });
 
@@ -1462,11 +1462,11 @@ function durationMatch(gameDuration, selectedDuration) {
 }
 
 // Event listeners
-document.getElementById('filterName').addEventListener('input', applyFilters);
-document.getElementById('filterDifficulty').addEventListener('change', applyFilters);
-document.getElementById('filterCategory').addEventListener('change', applyFilters);
-document.getElementById('filterPlayers').addEventListener('change', applyFilters);
-document.getElementById('filterDuration').addEventListener('change', applyFilters);
+["filterName", "filterDuration", "filterDifficulty", "filterCategory", "filterPlayers"].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener("input", filtraEGenera);
+  el.addEventListener("change", filtraEGenera);
+});
 
 // Inizializza pagina
 populateCategories();
