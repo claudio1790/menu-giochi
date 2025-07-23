@@ -1412,6 +1412,9 @@ function filtraEGenera() {
   const categoria = document.getElementById("filterCategory").value;
   const giocatori = document.getElementById("filterPlayers").value;
 
+  const container = document.getElementById("gamesContainer");
+  container.innerHTML = "";
+
   const giochiFiltrati = games.filter(game => {
     const matchTitolo = !nome || game.titolo.toLowerCase().includes(nome);
     const matchDurata = durata === "Tutte" || game.durata.toLowerCase().includes(durata);
@@ -1421,7 +1424,16 @@ function filtraEGenera() {
     return matchTitolo && matchDurata && matchDifficolta && matchCategoria && matchGiocatori;
   });
 
-  generaCard(giochiFiltrati);
+  if (giochiFiltrati.length === 0) {
+    container.innerHTML = '<p style="text-align:center; font-style:italic; color:#666;">Nessun gioco trovato.</p>';
+  } else {
+    giochiFiltrati.forEach(game => {
+      container.appendChild(createGameCard(game));
+    });
+  }
+
+  // 🔢 Aggiorna il contatore visivo
+  document.getElementById("gameCount").textContent = `Giochi trovati: ${giochiFiltrati.length}`;
 }
 
 ["filterName", "filterDuration", "filterDifficulty", "filterCategory", "filterPlayers"].forEach(id => {
@@ -1449,50 +1461,15 @@ function durationMatch(gameDuration, selectedDuration) {
   }
 }
 
-// Funzione per applicare i filtri
-function applyFilters() {
-  const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
-  const diffFilter = document.getElementById('filterDifficulty').value;
-  const catFilter = document.getElementById('filterCategory').value;
-  const playersFilter = document.getElementById('filterPlayers').value;
-  const durationFilter = document.getElementById('filterDuration').value;
-
-  const container = document.getElementById('gamesContainer');
-  container.innerHTML = '';
-
-  const filtered = games.filter(game => {
-    const titoloLower = game.titolo.toLowerCase();
-
-    if(nameFilter && !titoloLower.includes(nameFilter)) return false;
-    if(diffFilter && game.difficolta !== diffFilter) return false;
-    if(catFilter && game.categoria !== catFilter) return false;
-    if(playersFilter && !playersMatch(game.giocatori, playersFilter)) return false;
-    if(durationFilter && !durationMatch(game.durata, durationFilter)) return false;
-
-    return true;
-  });
-
-  if(filtered.length === 0) {
-    container.innerHTML = '<p style="text-align:center; font-style:italic; color:#666;">Nessun gioco corrisponde ai filtri selezionati.</p>';
-    return;
-  }
-
-  filtered.forEach(game => {
-    container.appendChild(createGameCard(game));
-  });
-}
-
 // Event listeners
 document.getElementById('filterName').addEventListener('input', applyFilters);
 document.getElementById('filterDifficulty').addEventListener('change', applyFilters);
 document.getElementById('filterCategory').addEventListener('change', applyFilters);
 document.getElementById('filterPlayers').addEventListener('change', applyFilters);
 document.getElementById('filterDuration').addEventListener('change', applyFilters);
-document.getElementById("gameCount").textContent = `Giochi trovati: ${giochiArray.length}`;
 
 // Inizializza pagina
 populateCategories();
-applyFilters();
 filtraEGenera();
 </script>
 
