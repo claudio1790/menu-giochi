@@ -54,11 +54,16 @@
       justify-content: flex-start;
     }
     .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       max-width: 900px;
       margin: 0 auto 30px auto;
+    }
+    .filter-group {
       display: flex;
-      flex-direction: column;  /* ogni filtro su riga singola */
-      gap: 10px;                /* spazio verticale tra filtri */
+      align-items: center;
+      gap: 10px; /* spazio tra etichetta e campo */
     }
     .filters label {
       font-weight: 600;
@@ -188,6 +193,7 @@
   </div>
 
   <div class="filters">
+    <div class="filter-group">
     <label for="filterDuration">Durata:</label>
     <select id="filterDuration">
       <option value="">Tutte</option>
@@ -195,7 +201,9 @@
       <option value="medio">Medio (31-60 min)</option>
       <option value="lungo">Lungo (&gt; 60 min)</option>
     </select>
-    
+    </div>
+
+    <div class="filter-group">
     <label for="filterDifficulty">Difficoltà:</label>
     <select id="filterDifficulty">
       <option value="">Tutte</option>
@@ -203,12 +211,16 @@
       <option value="Medio">Medio</option>
       <option value="Avanzato">Avanzato</option>
     </select>
+    </div>
 
+    <div class="filter-group">
     <label for="filterCategory">Categoria:</label>
     <select id="filterCategory">
       <option value="">Tutte</option>
     </select>
+    </div>
 
+    <div class="filter-group">
     <label for="filterPlayers">Numero giocatori:</label>
     <select id="filterPlayers">
       <option value="">Tutti</option>
@@ -223,6 +235,7 @@
       <option value="9">9</option>
       <option value="10">10</option>
     </select>
+    </div>
   </div>
 
   <div class="games-container" id="gamesContainer">
