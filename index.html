@@ -204,7 +204,7 @@
     <div class="filter-group">
     <label for="filterDuration">Durata:</label>
     <select id="filterDuration">
-      <option value="">Tutte</option>
+      <option value="Tutte">Tutte</option>
       <option value="breve">Breve (&le; 30 min)</option>
       <option value="medio">Medio (31-60 min)</option>
       <option value="lungo">Lungo (&gt; 60 min)</option>
@@ -214,7 +214,7 @@
     <div class="filter-group">
     <label for="filterDifficulty">Difficoltà:</label>
     <select id="filterDifficulty">
-      <option value="">Tutte</option>
+      <option value="Tutte">Tutte</option>
       <option value="Semplice">Semplice</option>
       <option value="Medio">Medio</option>
       <option value="Avanzato">Avanzato</option>
@@ -224,14 +224,14 @@
     <div class="filter-group">
     <label for="filterCategory">Categoria:</label>
     <select id="filterCategory">
-      <option value="">Tutte</option>
+      <option value="Tutte">Tutte</option>
     </select>
     </div>
 
     <div class="filter-group">
     <label for="filterPlayers">Numero giocatori:</label>
     <select id="filterPlayers">
-      <option value="">Tutti</option>
+      <option value="Tutti">Tutti</option>
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -1412,12 +1412,12 @@ function filtraEGenera() {
   const categoria = document.getElementById("filterCategory").value;
   const giocatori = document.getElementById("filterPlayers").value;
 
-  const giochiFiltrati = giochi.filter(game => {
+  const giochiFiltrati = games.filter(game => {
     const matchTitolo = !nome || game.titolo.toLowerCase().includes(nome);
-    const matchDurata = !durata || game.durata.toLowerCase().includes(durata);
-    const matchDifficolta = !difficolta || game.difficolta === difficolta;
-    const matchCategoria = !categoria || game.categoria === categoria;
-    const matchGiocatori = !giocatori || game.giocatori.includes(giocatori);
+    const matchDurata = durata === "Tutte" || game.durata.toLowerCase().includes(durata);
+    const matchDifficolta = difficolta === "Tutte" || game.difficolta === difficolta;
+    const matchCategoria = categoria === "Tutte" || game.categoria === categoria;
+    const matchGiocatori = giocatori === "Tutti" || game.giocatori.includes(giocatori);
     return matchTitolo && matchDurata && matchDifficolta && matchCategoria && matchGiocatori;
   });
 
