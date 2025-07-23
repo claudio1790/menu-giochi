@@ -1405,9 +1405,27 @@ function parseDuration(durationStr) {
   return null;
 }
 
+function durationMatch(gameDuration, selectedDuration) {
+  if (!selectedDuration || selectedDuration === "Tutte") return true;
+
+  const dur = parseDuration(gameDuration);
+  if (!dur) return false;
+
+  switch (selectedDuration) {
+    case 'breve':
+      return dur.max <= 30;
+    case 'medio':
+      return dur.min >= 31 && dur.max <= 60;
+    case 'lungo':
+      return dur.min > 60;
+    default:
+      return true;
+  }
+}
+
 function filtraEGenera() {
   const nome = document.getElementById("filterName").value.toLowerCase();
-  const durata = document.getElementById("filterDuration").value;
+  const matchDurata = durationMatch(game.durata, durata);
   const difficolta = document.getElementById("filterDifficulty").value;
   const categoria = document.getElementById("filterCategory").value;
   const giocatori = document.getElementById("filterPlayers").value;
@@ -1417,7 +1435,7 @@ function filtraEGenera() {
 
   const giochiFiltrati = games.filter(game => {
     const matchTitolo = !nome || game.titolo.toLowerCase().includes(nome);
-    const matchDurata = durata === "Tutte" || game.durata.toLowerCase().includes(durata);
+    const matchDurata = durationMatch(game.durata, durata);
     const matchDifficolta = difficolta === "Tutte" || game.difficolta === difficolta;
     const matchCategoria = categoria === "Tutte" || game.categoria === categoria;
     const matchGiocatori = giocatori === "Tutti" || playersMatch(game.giocatori, giocatori);
