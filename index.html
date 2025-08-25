@@ -181,6 +181,30 @@
     .toggle-description-btn:hover {
       background-color: #0056b3;
     }
+
+     /* INIZIO: NUOVO CODICE CSS PER IL PULSANTE TORNA SU */
+    #scrollToTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 99;
+      border: none;
+      outline: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      text-decoration: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    #scrollToTopBtn:hover {
+      background-color: #0056b3;
+    }
+    /* FINE: NUOVO CODICE CSS PER IL PULSANTE TORNA SU */
   </style>
 </head>
 <body>
@@ -253,6 +277,29 @@
   </div>
 
 <script>
+
+   // INIZIO: NUOVO CODICE JAVASCRIPT PER IL PULSANTE TORNA SU
+  const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+  function toggleScrollToTopBtn() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      scrollToTopBtn.style.display = "block";
+    } else {
+      scrollToTopBtn.style.display = "none";
+    }
+  }
+
+  window.addEventListener('scroll', toggleScrollToTopBtn);
+
+  scrollToTopBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+  // FINE: NUOVO CODICE JAVASCRIPT PER IL PULSANTE TORNA SU
+
 const games = [
   {
     titolo: "5 Minute Dungeon",
