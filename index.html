@@ -1,306 +1,259 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Giochi in Tavola</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #f0f4f8;
-      margin: 20px;
-      color: #333;
-    }
-    h1 {
-      text-align: flex-start;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      text-align: flex-start;
-      max-width: 600px;
-      margin: 0 auto 25px auto;
-      font-size: 1em;
-      color: #666;
-    }
-    .legend {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 25px;
-      gap: 30px;
-      font-weight: bold;
-    }
-    .legend div {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .dot.green { background-color: #4CAF50; }
-    .dot.yellow { background-color: #FFC107; }
-    .dot.orange { background-color: #FF5722; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giochi in Tavola</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f0f4f8;
+      margin: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: flex-start;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      text-align: flex-start;
+      max-width: 600px;
+      margin: 0 auto 25px auto;
+      font-size: 1em;
+      color: #666;
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+      gap: 30px;
+      font-weight: bold;
+    }
+    .legend div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot.green { background-color: #4CAF50; }
+    .dot.yellow { background-color: #FFC107; }
+    .dot.orange { background-color: #FF5722; }
 
-    .search-filter {
-      max-width: 900px;
-      margin: 0 auto 30px auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: flex-start;
-    }
-    .filters {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 900px;
-      margin: 0 auto 30px auto;
-    }
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 10px; /* spazio tra etichetta e campo */
-    }
-    .filters label {
-      font-weight: 600;
-      margin-right: 6px;
-    }
-    .search-filter select, .search-filter input[type="text"] {
-      padding: 8px 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      min-width: 150px;
-    }
-    .filters select, .filters input[type="text"] {
-      padding: 6px 10px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      min-width: 150px;
-    }
+    .search-filter {
+      max-width: 900px;
+      margin: 0 auto 30px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: flex-start;
+    }
+    .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 900px;
+      margin: 0 auto 30px auto;
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px; /* spazio tra etichetta e campo */
+    }
+    .filters label {
+      font-weight: 600;
+      margin-right: 6px;
+    }
+    .search-filter select, .search-filter input[type="text"] {
+      padding: 8px 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      min-width: 150px;
+    }
+    .filters select, .filters input[type="text"] {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      min-width: 150px;
+    }
 
-    #gameCount {
-      font-weight: bold;
-      font-size: 1em;
-      color: #333;
-      text-align: flex-start;
-      margin-bottom: 20px;
-    }
+    #gameCount {
+      font-weight: bold;
+      font-size: 1em;
+      color: #333;
+      text-align: flex-start;
+      margin-bottom: 20px;
+    }
 
-    .games-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .game-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      border: 4px solid transparent;
-      transition: transform 0.15s ease-in-out;
-    }
-    .game-card:hover {
-      transform: scale(1.03);
-    }
-    .game-card.green {
-      border-color: #4CAF50;
-    }
-    .game-card.yellow {
-      border-color: #FFC107;
-    }
-    .game-card.orange {
-      border-color: #FF5722;
-    }
-    .game-image {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-    }
-    .game-info {
-      padding: 15px 18px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .game-title {
-      font-size: 1.2em;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #222;
-    }
-    .game-details {
-      font-size: 0.9em;
-      line-height: 1.4;
-      color: #555;
-      display: flex;
-      flex-direction: column;
-      gap: 4px; /* distanza tra righe */
-    }
-    .difficulty {
-      margin-top: 12px;
-      font-weight: 700;
-    }
-    .game-description-extended {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
-      font-size: 0.9em;
-      color: #444;
-      background-color: #f9f9f9;
-      padding: 0 10px;
-      border-top: 1px solid #ddd;
-      margin-top: 10px;
-      border-radius: 4px;
-    }
-    .game-description-extended.show {
-      max-height: 300px;
-      padding: 10px;
-    }
-    .toggle-description-btn {
-      margin-top: 10px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
+    .games-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .game-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 4px solid transparent;
+      transition: transform 0.15s ease-in-out;
+    }
+    .game-card:hover {
+      transform: scale(1.03);
+    }
+    .game-card.green {
+      border-color: #4CAF50;
+    }
+    .game-card.yellow {
+      border-color: #FFC107;
+    }
+    .game-card.orange {
+      border-color: #FF5722;
+    }
+    .game-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .game-info {
+      padding: 15px 18px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .game-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #222;
+    }
+    .game-details {
+      font-size: 0.9em;
+      line-height: 1.4;
+      color: #555;
+      display: flex;
+      flex-direction: column;
+      gap: 4px; /* distanza tra righe */
+    }
+    .difficulty {
+      margin-top: 12px;
+      font-weight: 700;
+    }
+    .game-description-extended {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      font-size: 0.9em;
+      color: #444;
+      background-color: #f9f9f9;
+      padding: 0 10px;
+      border-top: 1px solid #ddd;
+      margin-top: 10px;
+      border-radius: 4px;
+    }
+    .game-description-extended.show {
+      max-height: 300px;
+      padding: 10px;
+    }
+    .toggle-description-btn {
+      margin-top: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
 
-    .toggle-description-btn:hover {
-      background-color: #0056b3;
-    }
-
-     /* INIZIO: NUOVO CODICE CSS PER IL PULSANTE TORNA SU */
-    #scrollToTopBtn {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 99;
-      border: none;
-      outline: none;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-      padding: 15px;
-      border-radius: 10px;
-      font-size: 18px;
-      text-decoration: none;
-      transition: opacity 0.3s ease-in-out;
-    }
-
-    #scrollToTopBtn:hover {
-      background-color: #0056b3;
-    }
-    /* FINE: NUOVO CODICE CSS PER IL PULSANTE TORNA SU */
-  </style>
+    .toggle-description-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
 
 <h1>Giochi in Tavola</h1>
-  <p class="subtitle">
-    Usa i filtri per trovare il gioco che ti ispira, vieni a chiederlo lasciando un documento e inizia a giocare! Se hai dubbi o ti servono consigli, siamo qui per aiutarti.
-  </p>
+  <p class="subtitle">
+    Usa i filtri per trovare il gioco che ti ispira, vieni a chiederlo lasciando un documento e inizia a giocare! Se hai dubbi o ti servono consigli, siamo qui per aiutarti.
+  </p>
 
-  <div class="legend">
-    <div><span class="dot green"></span> Semplice</div>
-    <div><span class="dot yellow"></span> Medio</div>
-    <div><span class="dot orange"></span> Avanzato</div>
-  </div>
+  <div class="legend">
+    <div><span class="dot green"></span> Semplice</div>
+    <div><span class="dot yellow"></span> Medio</div>
+    <div><span class="dot orange"></span> Avanzato</div>
+  </div>
 
-  <div class="search-filter">
-    <input type="text" id="filterName" placeholder="Cerca gioco..." />
-  </div>
+  <div class="search-filter">
+    <input type="text" id="filterName" placeholder="Cerca gioco..." />
+  </div>
 
-  <div class="filters">
-    <div class="filter-group">
-    <label for="filterDuration">Durata:</label>
-    <select id="filterDuration">
-      <option value="Tutte">Tutte</option>
-      <option value="breve">Breve (&le; 30 min)</option>
-      <option value="medio">Medio (31-60 min)</option>
-      <option value="lungo">Lungo (&gt; 60 min)</option>
-    </select>
-    </div>
+  <div class="filters">
+    <div class="filter-group">
+    <label for="filterDuration">Durata:</label>
+    <select id="filterDuration">
+      <option value="Tutte">Tutte</option>
+      <option value="breve">Breve (&le; 30 min)</option>
+      <option value="medio">Medio (31-60 min)</option>
+      <option value="lungo">Lungo (&gt; 60 min)</option>
+    </select>
+    </div>
 
-    <div class="filter-group">
-    <label for="filterDifficulty">Difficoltà:</label>
-    <select id="filterDifficulty">
-      <option value="Tutte">Tutte</option>
-      <option value="Semplice">Semplice</option>
-      <option value="Medio">Medio</option>
-      <option value="Avanzato">Avanzato</option>
-    </select>
-    </div>
+    <div class="filter-group">
+    <label for="filterDifficulty">Difficoltà:</label>
+    <select id="filterDifficulty">
+      <option value="Tutte">Tutte</option>
+      <option value="Semplice">Semplice</option>
+      <option value="Medio">Medio</option>
+      <option value="Avanzato">Avanzato</option>
+    </select>
+    </div>
 
-    <div class="filter-group">
-    <label for="filterCategory">Categoria:</label>
-    <select id="filterCategory">
-      <option value="Tutte">Tutte</option>
-    </select>
-    </div>
+    <div class="filter-group">
+    <label for="filterCategory">Categoria:</label>
+    <select id="filterCategory">
+      <option value="Tutte">Tutte</option>
+    </select>
+    </div>
 
-    <div class="filter-group">
-    <label for="filterPlayers">Numero giocatori:</label>
-    <select id="filterPlayers">
-      <option value="Tutti">Tutti</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-    </select>
-    </div>
-  </div>
+    <div class="filter-group">
+    <label for="filterPlayers">Numero giocatori:</label>
+    <select id="filterPlayers">
+      <option value="Tutti">Tutti</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    </div>
+  </div>
 
-  <p id="gameCount">Giochi trovati: 0</p>
-  
-  <div class="games-container" id="gamesContainer">
-    <!-- Cards generate qui -->
-  </div>
+  <p id="gameCount">Giochi trovati: 0</p>
+  
+  <div class="games-container" id="gamesContainer">
+      </div>
 
 <script>
-
-  // Aggiunto l'ascoltatore di eventi per il caricamento del DOM
+// Aggiunto l'ascoltatore di eventi per il caricamento del DOM
 document.addEventListener('DOMContentLoaded', (event) => {
-   // INIZIO: NUOVO CODICE JAVASCRIPT PER IL PULSANTE TORNA SU
-  const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
-  function toggleScrollToTopBtn() {
-    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-      scrollToTopBtn.style.display = "block";
-    } else {
-      scrollToTopBtn.style.display = "none";
-    }
-  }
-
-  window.addEventListener('scroll', toggleScrollToTopBtn);
-
-  scrollToTopBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-  // FINE: NUOVO CODICE JAVASCRIPT PER IL PULSANTE TORNA SU
 
 const games = [
   {
@@ -1087,187 +1040,187 @@ const games = [
 
 // Popola categorie filtro
 function populateCategories() {
-  const select = document.getElementById('filterCategory');
-  const categories = [...new Set(games.map(g => g.categoria))].sort();
-  categories.forEach(cat => {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    select.appendChild(option);
-  });
+  const select = document.getElementById('filterCategory');
+  const categories = [...new Set(games.map(g => g.categoria))].sort();
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    select.appendChild(option);
+  });
 }
 
 // Crea card gioco
 function createGameCard(game) {
-  const card = document.createElement('div');
-  card.classList.add('game-card');
-  if(game.difficolta === "Semplice") card.classList.add('green');
-  else if(game.difficolta === "Medio") card.classList.add('yellow');
-  else if(game.difficolta === "Avanzato") card.classList.add('orange');
+  const card = document.createElement('div');
+  card.classList.add('game-card');
+  if(game.difficolta === "Semplice") card.classList.add('green');
+  else if(game.difficolta === "Medio") card.classList.add('yellow');
+  else if(game.difficolta === "Avanzato") card.classList.add('orange');
 
-  card.innerHTML = `
-    <img class="game-image" src="${game.img}" alt="${game.titolo}">
-    <div class="game-info">
-      <div>
-        <div class="game-title">${game.titolo}</div>
-        <div class="game-details">
-          <div><strong>Categoria:</strong> ${game.categoria}</div>
-          <div><strong>Giocatori:</strong> ${game.giocatori}</div>
-          <div><strong>Durata:</strong> ${game.durata}</div>
-          <div><strong>Anno:</strong> ${game.anno}</div>
-          <div><strong>Lingua:</strong> ${game.lingua}</div>
-          <div><strong>Tipo:</strong> ${game.tipo}</div>
-          <div><em>${game.descrizione}</em></div>
-        </div>
-      <div class="difficulty">Difficoltà: ${game.difficolta}</div>
-      <button class="toggle-description-btn">+</button>
-      <div class="game-description-extended">${game.descrizioneEstesa || ""}</div>
-    </div>
-  `;
-  const toggleBtn = card.querySelector('.toggle-description-btn');
-  const extendedDesc = card.querySelector('.game-description-extended');
+  card.innerHTML = `
+    <img class="game-image" src="${game.img}" alt="${game.titolo}">
+    <div class="game-info">
+      <div>
+        <div class="game-title">${game.titolo}</div>
+        <div class="game-details">
+          <div><strong>Categoria:</strong> ${game.categoria}</div>
+          <div><strong>Giocatori:</strong> ${game.giocatori}</div>
+          <div><strong>Durata:</strong> ${game.durata}</div>
+          <div><strong>Anno:</strong> ${game.anno}</div>
+          <div><strong>Lingua:</strong> ${game.lingua}</div>
+          <div><strong>Tipo:</strong> ${game.tipo}</div>
+          <div><em>${game.descrizione}</em></div>
+        </div>
+      <div class="difficulty">Difficoltà: ${game.difficolta}</div>
+      <button class="toggle-description-btn">+</button>
+      <div class="game-description-extended">${game.descrizioneEstesa || ""}</div>
+    </div>
+  `;
+  const toggleBtn = card.querySelector('.toggle-description-btn');
+  const extendedDesc = card.querySelector('.game-description-extended');
 
-   toggleBtn.addEventListener('click', (e) => {
-   e.stopPropagation(); // Previene altri click sulla card
-   extendedDesc.classList.toggle('show');
-   toggleBtn.textContent = extendedDesc.classList.contains('show') ? '−' : '+';
+   toggleBtn.addEventListener('click', (e) => {
+   e.stopPropagation(); // Previene altri click sulla card
+   extendedDesc.classList.toggle('show');
+   toggleBtn.textContent = extendedDesc.classList.contains('show') ? '−' : '+';
 });
-  return card;
+  return card;
 }
 
 // Funzione per capire se un numero di giocatori è nel range del gioco
 function playersMatch(gamePlayers, selectedPlayers) {
-  // gamePlayers es: "2–5", "1–4", "2", "3–6"
-  // selectedPlayers è un numero stringa "3"
-  if (!selectedPlayers) return true;
+  // gamePlayers es: "2–5", "1–4", "2", "3–6"
+  // selectedPlayers è un numero stringa "3"
+  if (!selectedPlayers) return true;
 
-  const selNum = parseInt(selectedPlayers, 10);
-  // Rimuovo spazi e sostituisco trattini lunghi/dash con -
-  const cleaned = gamePlayers.replace(/\s+/g, '').replace(/–|—/g, '-');
+  const selNum = parseInt(selectedPlayers, 10);
+  // Rimuovo spazi e sostituisco trattini lunghi/dash con -
+  const cleaned = gamePlayers.replace(/\s+/g, '').replace(/–|—/g, '-');
 
-  // Se è un singolo numero
-  if (/^\d+$/.test(cleaned)) {
-    return selNum === parseInt(cleaned, 10);
-  }
+  // Se è un singolo numero
+  if (/^\d+$/.test(cleaned)) {
+    return selNum === parseInt(cleaned, 10);
+  }
 
-  // Se è un range (es. "2-5")
-  const parts = cleaned.split('-').map(n => parseInt(n, 10));
-  if(parts.length === 2) {
-    const [min, max] = parts;
-    return selNum >= min && selNum <= max;
-  }
+  // Se è un range (es. "2-5")
+  const parts = cleaned.split('-').map(n => parseInt(n, 10));
+  if(parts.length === 2) {
+    const [min, max] = parts;
+    return selNum >= min && selNum <= max;
+  }
 
-  // Se formato non previsto, considera no match
-  return false;
+  // Se formato non previsto, considera no match
+  return false;
 }
 
 // Funzione per estrarre durata minima e massima in minuti
 function parseDuration(durationStr) {
-  // Normalizzo stringa
-  const d = durationStr.toLowerCase().replace('minuti', 'min').replace('minuto', 'min').replace(/\s+/g,'').replace(/–|—/g, '-');
-  
-  // Caso singolo numero "25min"
-  if (/^\d+min$/.test(d)) {
-    const val = parseInt(d.replace('min',''),10);
-    return {min: val, max: val};
-  }
+  // Normalizzo stringa
+  const d = durationStr.toLowerCase().replace('minuti', 'min').replace('minuto', 'min').replace(/\s+/g,'').replace(/–|—/g, '-');
+  
+  // Caso singolo numero "25min"
+  if (/^\d+min$/.test(d)) {
+    const val = parseInt(d.replace('min',''),10);
+    return {min: val, max: val};
+  }
 
-  // Caso range tipo "5-30min"
-  const match = d.match(/^(\d+)-(\d+)min$/);
-  if(match) {
-    return {min: parseInt(match[1],10), max: parseInt(match[2],10)};
-  }
+  // Caso range tipo "5-30min"
+  const match = d.match(/^(\d+)-(\d+)min$/);
+  if(match) {
+    return {min: parseInt(match[1],10), max: parseInt(match[2],10)};
+  }
 
-  // Caso range con spazio, es "30-40 min" con spazio? (già tolto sopra)
-  // Non trovato, ritorna null per fallback
-  return null;
+  // Caso range con spazio, es "30-40 min" con spazio? (già tolto sopra)
+  // Non trovato, ritorna null per fallback
+  return null;
 }
 
 function durationMatch(gameDuration, selectedDuration) {
-  if (!selectedDuration || selectedDuration === "Tutte") return true;
+  if (!selectedDuration || selectedDuration === "Tutte") return true;
 
-  const dur = parseDuration(gameDuration);
-  if (!dur) return false;
+  const dur = parseDuration(gameDuration);
+  if (!dur) return false;
 
-  switch (selectedDuration) {
-    case 'breve':
-      return dur.max <= 30;
-    case 'medio':
-      return dur.min >= 31 && dur.max <= 60;
-    case 'lungo':
-      return dur.min > 60;
-    default:
-      return true;
-  }
+  switch (selectedDuration) {
+    case 'breve':
+      return dur.max <= 30;
+    case 'medio':
+      return dur.min >= 31 && dur.max <= 60;
+    case 'lungo':
+      return dur.min > 60;
+    default:
+      return true;
+  }
 }
 
 function filtraEGenera() {
-  const nome = document.getElementById("filterName").value.toLowerCase();
-  const durata = document.getElementById("filterDuration").value;
-  const difficolta = document.getElementById("filterDifficulty").value;
-  const categoria = document.getElementById("filterCategory").value;
-  const giocatori = document.getElementById("filterPlayers").value;
+  const nome = document.getElementById("filterName").value.toLowerCase();
+  const durata = document.getElementById("filterDuration").value;
+  const difficolta = document.getElementById("filterDifficulty").value;
+  const categoria = document.getElementById("filterCategory").value;
+  const giocatori = document.getElementById("filterPlayers").value;
 
-  const container = document.getElementById("gamesContainer");
-  container.innerHTML = "";
+  const container = document.getElementById("gamesContainer");
+  container.innerHTML = "";
 
-  const giochiFiltrati = games.filter(game => {
-    const matchTitolo = !nome || game.titolo.toLowerCase().includes(nome);
-    const matchDurata = durationMatch(game.durata, durata);
-    const matchDifficolta = difficolta === "Tutte" || game.difficolta === difficolta;
-    const matchCategoria = categoria === "Tutte" || game.categoria === categoria;
-    const matchGiocatori = giocatori === "Tutti" || playersMatch(game.giocatori, giocatori);
-    return matchTitolo && matchDurata && matchDifficolta && matchCategoria && matchGiocatori;
-  });
+  const giochiFiltrati = games.filter(game => {
+    const matchTitolo = !nome || game.titolo.toLowerCase().includes(nome);
+    const matchDurata = durationMatch(game.durata, durata);
+    const matchDifficolta = difficolta === "Tutte" || game.difficolta === difficolta;
+    const matchCategoria = categoria === "Tutte" || game.categoria === categoria;
+    const matchGiocatori = giocatori === "Tutti" || playersMatch(game.giocatori, giocatori);
+    return matchTitolo && matchDurata && matchDifficolta && matchCategoria && matchGiocatori;
+  });
 
-  if (giochiFiltrati.length === 0) {
-    container.innerHTML = '<p style="text-align:center; font-style:italic; color:#666;">Nessun gioco trovato.</p>';
-  } else {
-    giochiFiltrati.forEach(game => {
-      container.appendChild(createGameCard(game));
-    });
-  }
+  if (giochiFiltrati.length === 0) {
+    container.innerHTML = '<p style="text-align:center; font-style:italic; color:#666;">Nessun gioco trovato.</p>';
+  } else {
+    giochiFiltrati.forEach(game => {
+      container.appendChild(createGameCard(game));
+    });
+  }
 
-  // 🔢 Aggiorna il contatore visivo
-  document.getElementById("gameCount").textContent = `Giochi trovati: ${giochiFiltrati.length}`;
+  // 🔢 Aggiorna il contatore visivo
+  document.getElementById("gameCount").textContent = `Giochi trovati: ${giochiFiltrati.length}`;
 }
 
 ["filterName", "filterDuration", "filterDifficulty", "filterCategory", "filterPlayers"].forEach(id => {
-  const el = document.getElementById(id);
-  el.addEventListener("input", filtraEGenera);
-  el.addEventListener("change", filtraEGenera);
+  const el = document.getElementById(id);
+  el.addEventListener("input", filtraEGenera);
+  el.addEventListener("change", filtraEGenera);
 });
 
 // Funzione per controllare se la durata corrisponde alla categoria breve/medio/lungo
 function durationMatch(gameDuration, selectedDuration) {
-  if(!selectedDuration) return true;
+  if(!selectedDuration) return true;
 
-  const dur = parseDuration(gameDuration);
-  if(!dur) return false;
+  const dur = parseDuration(gameDuration);
+  if(!dur) return false;
 
-  switch(selectedDuration) {
-    case 'breve':
-      return dur.max <= 30;
-    case 'medio':
-      return dur.min >= 31 && dur.max <= 60;
-    case 'lungo':
-      return dur.min > 60;
-    default:
-      return true;
-  }
+  switch(selectedDuration) {
+    case 'breve':
+      return dur.max <= 30;
+    case 'medio':
+      return dur.min >= 31 && dur.max <= 60;
+    case 'lungo':
+      return dur.min > 60;
+    default:
+      return true;
+  }
 }
 
 // Event listeners
 ["filterName", "filterDuration", "filterDifficulty", "filterCategory", "filterPlayers"].forEach(id => {
-  const el = document.getElementById(id);
-  el.addEventListener("input", filtraEGenera);
-  el.addEventListener("change", filtraEGenera);
-}
+  const el = document.getElementById(id);
+  el.addEventListener("input", filtraEGenera);
+  el.addEventListener("change", filtraEGenera);
 });
 
 // Inizializza pagina
 populateCategories();
 filtraEGenera();
+
 </script>
 
 </body>
