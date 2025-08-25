@@ -278,6 +278,8 @@
 
 <script>
 
+  // Aggiunto l'ascoltatore di eventi per il caricamento del DOM
+document.addEventListener('DOMContentLoaded', (event) => {
    // INIZIO: NUOVO CODICE JAVASCRIPT PER IL PULSANTE TORNA SU
   const scrollToTopBtn = document.getElementById("scrollToTopBtn");
 
@@ -1260,6 +1262,7 @@ function durationMatch(gameDuration, selectedDuration) {
   const el = document.getElementById(id);
   el.addEventListener("input", filtraEGenera);
   el.addEventListener("change", filtraEGenera);
+}
 });
 
 // Inizializza pagina
