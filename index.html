@@ -388,7 +388,7 @@ const games = [
     lingua: "ENG",
     anno: "2021",
     giocatori: "1–9",
-    durata: "20-40 minuti",
+    durata: "30-40 minuti",
     tipo: "Deduzione sociale, Bluff",
     descrizione: "Gestione rischio / fortuna, Movimento tramite dadi, Ruoli nascosti / Infezione segreta",
     descrizioneEstesa: "Fuggire dalla peste non è facile quando non sai chi è infetto! Un mix geniale di corsa, bluff e paranoia medievale.",
@@ -531,7 +531,7 @@ const games = [
   lingua: "ENG",
   anno: "2018",
   giocatori: "2–9",
-  durata: "20-40 min",
+  durata: "30-40 min",
   tipo: "Deduzione sociale, Bluff",
   descrizione: "Gestione rischio / fortuna, Alleanze temporanee, Duelli con carte",
   descrizioneEstesa: "Bluff, pistole e alleanze temporanee nel selvaggio West. Raccogli l’oro, sopravvivi al tradimento, resta l’ultimo in piedi.",
@@ -557,7 +557,7 @@ const games = [
   lingua: "ITA",
   anno: "2019",
   giocatori: "2–6",
-  durata: "45–120 min",
+  durata: "60–120 min",
   tipo: "Asimmetrico / Tematico",
   descrizione: "Asymmetric play, diluizione risorse, obiettivi specifici per villain",
   descrizioneEstesa: "Vesti i panni di un cattivo Disney e realizza il tuo piano malvagio. Ogni personaggio ha obiettivi e mazzi unici!",
@@ -700,7 +700,7 @@ const games = [
   lingua: "ITA",
   anno: "2022",
   giocatori: "2–6",
-  durata: "20–40 min",
+  durata: "30–40 min",
   tipo: "Bluff / Deduzione",
   descrizione: "Allineamento segreto, maggioranze, gestione mano",
   descrizioneEstesa: "Deduzione, bluff e alleanze segrete in un regno in guerra. Ogni eroe aiuta una fazione, ma solo una vincerà.",
@@ -869,7 +869,7 @@ const games = [
   lingua: "ITA",
   anno: "2024",
   giocatori: "2–5",
-  durata: "20–50 min",
+  durata: "30–50 min",
   tipo: "Piazzamento / Draft",
   descrizione: "Draft tessere, costruzione parchi a tema dinosauri",
   descrizioneEstesa: "Assumi il ruolo di capo tribù nell'era mesolitica, guidando il tuo popolo attraverso sfide quotidiane. Ogni turno, selezioni carte da un'offerta comune per espandere la tua tribù con nuovi membri, costruire abitazioni e affrontare eventi che possono influenzare il corso della partita. Con meccaniche di drafting e collezione set, ogni decisione conta per accumulare punti prestigio e ottenere la vittoria.",
@@ -1051,7 +1051,7 @@ const games = [
   lingua: "ITA",
   anno: "2021",
   giocatori: "2–4",
-  durata: "20–40 min",
+  durata: "30–40 min",
   tipo: "Miniature / Duello",
   descrizione: "Deck‑building, movimento area, poteri asimmetrici",
   descrizioneEstesa: "Entra nell'arena con Unmatched: Battle of Legends, Volume Two, un gioco di combattimento tattico per 2–4 giocatori. Ogni eroe è rappresentato da un mazzo unico che riflette il suo stile e la sua leggenda. Le meccaniche di movimento strategico e risoluzione dei combattimenti senza casualità offrono un'esperienza di gioco unica che premia l'abilità.",
@@ -1064,7 +1064,7 @@ const games = [
   lingua: "ITA",
   anno: "2020",
   giocatori: "2–4",
-  durata: "20–40 min",
+  durata: "30–40 min",
   tipo: "Miniature / Duello",
   descrizione: "Deck‑building, movimento area, poteri asimmetrici",
   descrizioneEstesa: "Entra nell'arena con Unmatched: Battle of Legends, Volume Two, un gioco di combattimento tattico per 2–4 giocatori. Ogni eroe è rappresentato da un mazzo unico che riflette il suo stile e la sua leggenda. Le meccaniche di movimento strategico e risoluzione dei combattimenti senza casualità offrono un'esperienza di gioco unica che premia l'abilità.",
@@ -1090,7 +1090,7 @@ const games = [
   lingua: "ITA",
   anno: "2020",
   giocatori: "1–5",
-  durata: "15–40 min",
+  durata: "30–40 min",
   tipo: "Sci-fi / Motore combo",
   descrizione: "Piazzamento lavoratori, combo catene",
   descrizioneEstesa: "Wild Space è un gioco di carte strategico che ti catapulta ai confini dell'Impero Galattico, dove esploratori animali reclutano equipaggi per scoprire pianeti misteriosi e accumulare ricchezze. In ogni partita, dovrai gestire le tue carte per formare combinazioni vincenti, completare missioni segrete e affrontare pianeti ostili.",
@@ -1183,7 +1183,7 @@ const games = [
                 case 'breve':
                     return dur.max <= 30;
                 case 'medio':
-                    return dur.max < 60;
+                    return dur.min >= 30 && dur.max < 60;
                 case 'lungo':
                     return dur.min >= 60;
                 default:
