@@ -1183,7 +1183,7 @@ const games = [
                 case 'breve':
                     return dur.max <= 30;
                 case 'medio':
-                    return dur.min > 30 && dur.max < 60;
+                    return dur.max < 60;
                 case 'lungo':
                     return dur.min >= 60;
                 default:
