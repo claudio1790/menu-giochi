@@ -4,210 +4,430 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Giochi in Tavola</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* Stile per l'intero body e i titoli */
-        body {
-            font-family: "Poppins", sans-serif;
-            background: #f0f4f8;
-            margin: 20px;
-            color: #333;
-        }
-        h1 {
-            text-align: flex-start;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: flex-start;
-            max-width: 600px;
-            margin: 0 auto 25px auto;
-            font-size: 1em;
-            color: #666;
+        :root {
+            --bg-color: #121016;
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --primary: #ff6b00;
+            --primary-hover: #e05d00;
+            --accent-purple: #8b5cf6;
+            --border-radius: 12px;
+            
+            /* Difficulty Colors */
+            --green: #2ecc71;
+            --yellow: #f1c40f;
+            --orange: #e67e22;
+            
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.2);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.3);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.4);
         }
 
-        /* Stile per la legenda delle difficoltà */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: var(--bg-color);
+            /* Subtle, non-intrusive dark SVG Halloween repeating pattern + soft glow vignette */
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 50% 80%, rgba(255, 107, 0, 0.08) 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath fill='%23ffffff' fill-opacity='0.035' d='M30 20c-3 0-6 2-8 5 2-1 4-1 6 0-3 3-4 7-3 11 2-2 5-3 8-2-3 4-3 9 0 12-4-2-9-1-12 2 3-6 1-13-4-17 3-1 6-3 7-6-5 1-10-2-12-7 4 1 8 0 11-3-4-3-6-8-4-13 4 3 9 4 13 1 2 4 6 6 10 5-2-4-1-9 2-12 1 3 4 5 8 5zm60 50c-3 0-6 2-8 5 2-1 4-1 6 0-3 3-4 7-3 11 2-2 5-3 8-2-3 4-3 9 0 12-4-2-9-1-12 2 3-6 1-13-4-17 3-1 6-3 7-6-5 1-10-2-12-7 4 1 8 0 11-3-4-3-6-8-4-13 4 3 9 4 13 1 2 4 6 6 10 5-2-4-1-9 2-12 1 3 4 5 8 5zM15 85c1 3 4 5 7 5-2 1-3 3-3 5 3-1 6 0 8 3 0-3 2-6 5-7-3-1-5-4-5-7 0 2-2 4-5 4-1-3-4-5-7-3 2 2 2 5 0 7zm75-60c1 3 4 5 7 5-2 1-3 3-3 5 3-1 6 0 8 3 0-3 2-6 5-7-3-1-5-4-5-7 0 2-2 4-5 4-1-3-4-5-7-3 2 2 2 5 0 7z'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+            color: var(--text-main);
+            padding: 20px 15px 40px 15px;
+            line-height: 1.5;
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto 25px auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+        }
+
+        h1 i {
+            color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            color: #cbd5e0;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
         .legend {
             display: flex;
             justify-content: center;
-            margin-bottom: 25px;
-            gap: 30px;
-            font-weight: bold;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px auto 30px auto;
+            background: rgba(26, 22, 37, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            padding: 12px 24px;
+            border-radius: 30px;
+            max-width: 500px;
+            box-shadow: var(--shadow-sm);
         }
+
         .legend div {
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
+
         .dot {
-            width: 18px;
-            height: 18px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             display: inline-block;
         }
-        .dot.green { background-color: #4CAF50; }
-        .dot.yellow { background-color: #FFC107; }
-        .dot.orange { background-color: #FF5722; }
 
-        /* Stile per i filtri e il contatore */
-        .search-filter {
-            max-width: 900px;
+        .dot.green { background-color: var(--green); }
+        .dot.yellow { background-color: var(--yellow); }
+        .dot.orange { background-color: var(--orange); }
+
+        .controls-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            max-width: 1100px;
             margin: 0 auto 30px auto;
-            display: flex;
-            flex-wrap: wrap;
+            padding: 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            font-size: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            justify-content: flex-start;
         }
-        .filters {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 900px;
-            margin: 0 auto 30px auto;
-        }
+
         .filter-group {
             display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .filters label {
-            font-weight: 600;
-            margin-right: 6px;
-        }
-        .search-filter select, .search-filter input[type="text"] {
-            padding: 8px 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            min-width: 150px;
-        }
-        .filters select, .filters input[type="text"] {
-            padding: 6px 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            min-width: 150px;
-        }
-        #gameCount {
-            font-weight: bold;
-            font-size: 1em;
-            color: #333;
-            text-align: flex-start;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        /* Stile per le schede dei giochi */
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group select {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+            font-family: inherit;
+        }
+
+        .filter-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        #gameCount {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .reset-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            color: var(--primary-hover);
+        }
+
         .games-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
-            gap: 20px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
             margin: 0 auto;
         }
+
         .game-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            border: 4px solid transparent;
-            transition: transform 0.15s ease-in-out;
+            position: relative;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            border-top: 5px solid transparent;
         }
+
         .game-card:hover {
-            transform: scale(1.03);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
         }
-        .game-card.green { border-color: #4CAF50; }
-        .game-card.yellow { border-color: #FFC107; }
-        .game-card.orange { border-color: #FF5722; }
+
+        .game-card.green { border-top-color: var(--green); }
+        .game-card.yellow { border-top-color: var(--yellow); }
+        .game-card.orange { border-top-color: var(--orange); }
+
+        .game-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background-color: #edf2f7;
+            overflow: hidden;
+        }
+
         .game-image {
             width: 100%;
-            height: 160px;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
         }
+
+        .game-card:hover .game-image {
+            transform: scale(1.05);
+        }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .green .difficulty-badge { background-color: var(--green); }
+        .yellow .difficulty-badge { background-color: var(--yellow); color: #333; }
+        .orange .difficulty-badge { background-color: var(--orange); }
+
         .game-info {
-            padding: 15px 18px;
+            padding: 18px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
+
         .game-title {
-            font-size: 1.2em;
+            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            color: #222;
+            margin-bottom: 10px;
+            color: #1a202c;
+            line-height: 1.3;
         }
+
         .game-details {
-            font-size: 0.9em;
-            line-height: 1.4;
-            color: #555;
+            font-size: 0.88rem;
+            color: #4a5568;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
         }
-        .difficulty {
-            margin-top: 12px;
-            font-weight: 700;
+
+        .game-details div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+
+        .game-details i {
+            width: 16px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .short-desc {
+            margin-top: 8px;
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 8px;
+        }
+
+        .card-actions {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .toggle-description-btn {
+            background-color: #edf2f7;
+            color: var(--text-main);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-description-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
         .game-description-extended {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            font-size: 0.9em;
-            color: #444;
-            background-color: #f9f9f9;
-            padding: 0 10px;
-            border-top: 1px solid #ddd;
+            transition: max-height 0.35s ease-out, padding 0.35s ease;
+            font-size: 0.85rem;
+            color: #4a5568;
+            background-color: #f8fafc;
+            border-radius: 6px;
+            width: 100%;
             margin-top: 10px;
-            border-radius: 4px;
-        }
-        .game-description-extended.show {
-            max-height: 300px;
-            padding: 10px;
-        }
-        .toggle-description-btn {
-            margin-top: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-        .toggle-description-btn:hover {
-            background-color: #0056b3;
         }
 
-        /* Stile per il pulsante "Torna su" */
+        .game-description-extended.show {
+            max-height: 300px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
         #scrollToTopBtn {
             display: none;
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 25px;
+            right: 25px;
             z-index: 99;
             border: none;
             outline: none;
-            background-color: #007bff;
+            background-color: var(--primary);
             color: white;
             cursor: pointer;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 22px;
-            text-decoration: none;
-            transition: opacity 0.3s ease-in-out;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            align-items: center;
+            justify-content: center;
         }
+
         #scrollToTopBtn:hover {
-            background-color: #0056b3;
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            color: #cbd5e0;
         }
     </style>
 </head>
 <body>
 
-<h1>Giochi in Tavola</h1>
-<p class="subtitle">
-    Usa i filtri per trovare il gioco che ti ispira, vieni a chiederlo lasciando un documento e inizia a giocare! Se hai dubbi o ti servono consigli, siamo qui per aiutarti.
-</p>
+<div class="header-container">
+    <h1><i class="fa-solid fa-ghost"></i> Giochi in Tavola <i class="fa-solid fa-spider"></i></h1>
+    <p class="subtitle">
+        Sfoglia il nostro catalogo e trova il gioco perfetto per la tua serata. Filtra per giocatori, durata o difficoltà, richiedilo al banco ed inizia subito a giocare!
+    </p>
+</div>
 
 <div class="legend">
     <div><span class="dot green"></span> Semplice</div>
@@ -215,81 +435,88 @@
     <div><span class="dot orange"></span> Avanzato</div>
 </div>
 
-<div class="search-filter">
-    <input type="text" id="filterName" placeholder="Cerca gioco..." />
+<div class="controls-card">
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="filterName" placeholder="Cerca un gioco per titolo..." />
+    </div>
+
+    <div class="filters-grid">
+        <div class="filter-group">
+            <label for="filterDuration">Durata</label>
+            <select id="filterDuration">
+                <option value="Tutte">Tutte le durate</option>
+                <option value="breve">Breve (&le; 30 min)</option>
+                <option value="medio">Medio (31-60 min)</option>
+                <option value="lungo">Lungo (&gt; 60 min)</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="filterDifficulty">Difficoltà</label>
+            <select id="filterDifficulty">
+                <option value="Tutte">Tutte le difficoltà</option>
+                <option value="Semplice">Semplice</option>
+                <option value="Medio">Medio</option>
+                <option value="Avanzato">Avanzato</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="filterCategory">Categoria</label>
+            <select id="filterCategory">
+                <option value="Tutte">Tutte le categorie</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="filterPlayers">Giocatori</label>
+            <select id="filterPlayers">
+                <option value="Tutti">Qualsiasi numero</option>
+                <option value="1">1 Giocatore</option>
+                <option value="2">2 Giocatori</option>
+                <option value="3">3 Giocatori</option>
+                <option value="4">4 Giocatori</option>
+                <option value="5">5 Giocatori</option>
+                <option value="6">6 Giocatori</option>
+                <option value="7">7+ Giocatori</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="filter-actions">
+        <span id="gameCount">Giochi trovati: 0</span>
+        <button class="reset-btn" id="resetFiltersBtn"><i class="fa-solid fa-rotate-left"></i> Reset Filtri</button>
+    </div>
 </div>
 
-<div class="filters">
-    <div class="filter-group">
-        <label for="filterDuration">Durata:</label>
-        <select id="filterDuration">
-            <option value="Tutte">Tutte</option>
-            <option value="breve">Breve (&le; 30 min)</option>
-            <option value="medio">Medio (31-60 min)</option>
-            <option value="lungo">Lungo (&gt; 60 min)</option>
-        </select>
-    </div>
-    <div class="filter-group">
-        <label for="filterDifficulty">Difficoltà:</label>
-        <select id="filterDifficulty">
-            <option value="Tutte">Tutte</option>
-            <option value="Semplice">Semplice</option>
-            <option value="Medio">Medio</option>
-            <option value="Avanzato">Avanzato</option>
-        </select>
-    </div>
-    <div class="filter-group">
-        <label for="filterCategory">Categoria:</label>
-        <select id="filterCategory">
-            <option value="Tutte">Tutte</option>
-        </select>
-    </div>
-    <div class="filter-group">
-        <label for="filterPlayers">Numero giocatori:</label>
-        <select id="filterPlayers">
-            <option value="Tutti">Tutti</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-        </select>
-    </div>
-</div>
+<div class="games-container" id="gamesContainer"></div>
 
-<p id="gameCount">Giochi trovati: 0</p>
-<div class="games-container" id="gamesContainer">
-    </div>
-
-<a href="#" id="scrollToTopBtn" title="Torna su">↑</a>
+<!-- Scroll To Top Button -->
+<button id="scrollToTopBtn" title="Torna su"><i class="fa-solid fa-arrow-up"></i></button>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
+    document.addEventListener('DOMContentLoaded', () => {
 
         // --- Gestione del pulsante "Torna su" ---
         const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        
         function toggleScrollToTopBtn() {
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                scrollToTopBtn.style.display = "block";
+            if (window.scrollY > 200) {
+                scrollToTopBtn.style.display = "flex";
             } else {
                 scrollToTopBtn.style.display = "none";
             }
         }
+        
         window.addEventListener('scroll', toggleScrollToTopBtn);
-        scrollToTopBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
+        
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
-        // --- Inizio codice di gestione dei giochi ---
-const games = [
+        // --- Lista Giochi di Esempio ---
+        const games = [
   {
     titolo: "3 Witches",
     difficolta: "Medio",
@@ -670,51 +897,65 @@ const games = [
         function createGameCard(game) {
             const card = document.createElement('div');
             card.classList.add('game-card');
-            if (game.difficolta === "Semplice") card.classList.add('green');
-            else if (game.difficolta === "Medio") card.classList.add('yellow');
-            else if (game.difficolta === "Avanzato") card.classList.add('orange');
+            
+            let diffClass = 'green';
+            if (game.difficolta === "Medio") diffClass = 'yellow';
+            if (game.difficolta === "Avanzato") diffClass = 'orange';
+            
+            card.classList.add(diffClass);
 
             card.innerHTML = `
-                <img class="game-image" src="${game.img}" alt="${game.titolo}">
+                <div class="game-image-wrapper">
+                    <img class="game-image" src="${game.img}" alt="${game.titolo}" loading="lazy">
+                    <span class="difficulty-badge">${game.difficolta}</span>
+                </div>
                 <div class="game-info">
                     <div>
                         <div class="game-title">${game.titolo}</div>
                         <div class="game-details">
-                            <div><strong>Categoria:</strong> ${game.categoria}</div>
-                            <div><strong>Giocatori:</strong> ${game.giocatori}</div>
-                            <div><strong>Durata:</strong> ${game.durata}</div>
-                            <div><strong>Anno:</strong> ${game.anno}</div>
-                            <div><strong>Lingua:</strong> ${game.lingua}</div>
-                            <div><strong>Tipo:</strong> ${game.tipo}</div>
-                            <div><em>${game.descrizione}</em></div>
+                            <div><i class="fa-solid fa-layer-group"></i> <strong>Categoria:</strong> ${game.categoria}</div>
+                            <div><i class="fa-solid fa-users"></i> <strong>Giocatori:</strong> ${game.giocatori}</div>
+                            <div><i class="fa-solid fa-clock"></i> <strong>Durata:</strong> ${game.durata}</div>
+                            <div><i class="fa-solid fa-calendar"></i> <strong>Anno:</strong> ${game.anno}</div>
+                            <div><i class="fa-solid fa-language"></i> <strong>Lingua:</strong> ${game.lingua}</div>
+                            <div><i class="fa-solid fa-chess"></i> <strong>Tipo:</strong> ${game.tipo}</div>
                         </div>
-                        <div class="difficulty">Difficoltà: ${game.difficolta}</div>
-                        <button class="toggle-description-btn">+</button>
-                        <div class="game-description-extended">${game.descrizioneEstesa || ""}</div>
+                        <div class="short-desc">${game.descrizione}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="toggle-description-btn" title="Mostra di più">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <div class="game-description-extended">${game.descrizioneEstesa || "Nessuna descrizione ulteriore disponibile."}</div>
                     </div>
                 </div>
             `;
+
             const toggleBtn = card.querySelector('.toggle-description-btn');
             const extendedDesc = card.querySelector('.game-description-extended');
+            const icon = toggleBtn.querySelector('i');
 
             toggleBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                extendedDesc.classList.toggle('show');
-                toggleBtn.textContent = extendedDesc.classList.contains('show') ? '−' : '+';
+                const isShown = extendedDesc.classList.toggle('show');
+                icon.className = isShown ? 'fa-solid fa-minus' : 'fa-solid fa-plus';
             });
+
             return card;
         }
 
         function playersMatch(gamePlayers, selectedPlayers) {
-            if (!selectedPlayers) return true;
+            if (!selectedPlayers || selectedPlayers === "Tutti") return true;
             const selNum = parseInt(selectedPlayers, 10);
             const cleaned = gamePlayers.replace(/\s+/g, '').replace(/–|—/g, '-');
+            
             if (/^\d+$/.test(cleaned)) {
                 return selNum === parseInt(cleaned, 10);
             }
             const parts = cleaned.split('-').map(n => parseInt(n, 10));
             if (parts.length === 2) {
                 const [min, max] = parts;
+                if (selectedPlayers === "7") return max >= 7;
                 return selNum >= min && selNum <= max;
             }
             return false;
@@ -750,7 +991,7 @@ const games = [
         }
 
         function filtraEGenera() {
-            const nome = document.getElementById("filterName").value.toLowerCase();
+            const nome = document.getElementById("filterName").value.toLowerCase().trim();
             const durata = document.getElementById("filterDuration").value;
             const difficolta = document.getElementById("filterDifficulty").value;
             const categoria = document.getElementById("filterCategory").value;
@@ -764,12 +1005,17 @@ const games = [
                 const matchDurata = durationMatch(game.durata, durata);
                 const matchDifficolta = difficolta === "Tutte" || game.difficolta === difficolta;
                 const matchCategoria = categoria === "Tutte" || game.categoria === categoria;
-                const matchGiocatori = giocatori === "Tutti" || playersMatch(game.giocatori, giocatori);
+                const matchGiocatori = playersMatch(game.giocatori, giocatori);
                 return matchTitolo && matchDurata && matchDifficolta && matchCategoria && matchGiocatori;
             });
 
             if (giochiFiltrati.length === 0) {
-                container.innerHTML = '<p style="text-align:center; font-style:italic; color:#666;">Nessun gioco trovato.</p>';
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="fa-solid fa-ghost"></i>
+                        <p>Nessun gioco trovato con i filtri selezionati.</p>
+                    </div>
+                `;
             } else {
                 giochiFiltrati.forEach(game => {
                     container.appendChild(createGameCard(game));
@@ -778,6 +1024,7 @@ const games = [
             document.getElementById("gameCount").textContent = `Giochi trovati: ${giochiFiltrati.length}`;
         }
 
+        // --- Event Listeners per i Filtri e Reset ---
         ["filterName", "filterDuration", "filterDifficulty", "filterCategory", "filterPlayers"].forEach(id => {
             const el = document.getElementById(id);
             if(el) {
@@ -786,6 +1033,16 @@ const games = [
             }
         });
 
+        document.getElementById("resetFiltersBtn").addEventListener("click", () => {
+            document.getElementById("filterName").value = "";
+            document.getElementById("filterDuration").value = "Tutte";
+            document.getElementById("filterDifficulty").value = "Tutte";
+            document.getElementById("filterCategory").value = "Tutte";
+            document.getElementById("filterPlayers").value = "Tutti";
+            filtraEGenera();
+        });
+
+        // Inizializzazione
         populateCategories();
         filtraEGenera();
     });
