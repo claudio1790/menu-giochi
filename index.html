@@ -37,7 +37,7 @@
         body {
             font-family: "Poppins", sans-serif;
             background-color: #0b0813;
-            /* Sfondo con l'immagine di pipistrello indicata */
+            /* Sfondo con l'immagine di pipistrello indicata dall'utente */
             background-image: 
                 radial-gradient(circle at 50% 15%, rgba(147, 51, 234, 0.25) 0%, transparent 60%),
                 radial-gradient(circle at 50% 85%, rgba(255, 85, 0, 0.2) 0%, transparent 65%),
@@ -79,6 +79,63 @@
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
+        }
+
+        /* Music Bar Control Player */
+        .music-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: rgba(18, 12, 26, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 85, 0, 0.4);
+            padding: 10px 20px;
+            border-radius: 30px;
+            max-width: 450px;
+            margin: 0 auto 20px auto;
+            color: #e2e8f0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .music-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .music-btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.08);
+        }
+
+        .music-info {
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .music-volume {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-volume input[type="range"] {
+            width: 75px;
+            accent-color: var(--primary);
+            cursor: pointer;
         }
 
         .legend {
@@ -432,6 +489,21 @@
     </p>
 </div>
 
+<!-- Music Player Control Panel -->
+<div class="music-bar">
+    <button class="music-btn" id="playMusicBtn" title="Riproduci/Pausa Musica">
+        <i class="fa-solid fa-play" id="musicIcon"></i>
+    </button>
+    <div class="music-info">
+        <i class="fa-solid fa-music" style="color: var(--primary);"></i>
+        <span id="musicStatusText">Musica Halloween Spettrale</span>
+    </div>
+    <div class="music-volume">
+        <i class="fa-solid fa-volume-high" style="font-size: 0.85rem;"></i>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.3">
+    </div>
+</div>
+
 <div class="legend">
     <div><span class="dot green"></span> Semplice</div>
     <div><span class="dot yellow"></span> Medio</div>
@@ -500,6 +572,86 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+
+        /* Spooky Synthesizer Ambient Generator */
+        let audioCtx = null;
+        let isPlaying = false;
+        let masterGain = null;
+        let ambientTimer = null;
+
+        const playMusicBtn = document.getElementById('playMusicBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const musicStatusText = document.getElementById('musicStatusText');
+
+        // Note frequenze in Hz (G minor arpeggio spettrale)
+        const notes = [196.00, 233.08, 293.66, 311.13, 369.99, 392.00, 466.16, 587.33];
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                masterGain = audioCtx.createGain();
+                masterGain.gain.value = parseFloat(volumeSlider.value);
+                masterGain.connect(audioCtx.destination);
+            }
+        }
+
+        function playSpookyNote() {
+            if (!isPlaying || !audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const noteGain = audioCtx.createGain();
+
+            // Sceglie una nota casuale
+            const freq = notes[Math.floor(Math.random() * notes.length)];
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.type = Math.random() > 0.5 ? 'sine' : 'triangle';
+
+            // Inviluppo soffuso
+            const now = audioCtx.currentTime;
+            noteGain.gain.setValueAtTime(0, now);
+            noteGain.gain.linearRampToValueAtTime(0.15, now + 1.2);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + 3.5);
+
+            osc.connect(noteGain);
+            noteGain.connect(masterGain);
+
+            osc.start(now);
+            osc.stop(now + 3.6);
+
+            // Programma la nota successiva
+            const nextDelay = 800 + Math.random() * 1400;
+            ambientTimer = setTimeout(playSpookyNote, nextDelay);
+        }
+
+        function toggleMusic() {
+            initAudio();
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (isPlaying) {
+                isPlaying = false;
+                clearTimeout(ambientTimer);
+                musicIcon.className = 'fa-solid fa-play';
+                musicStatusText.textContent = 'Musica in Pausa';
+            } else {
+                isPlaying = true;
+                musicIcon.className = 'fa-solid fa-pause';
+                musicStatusText.textContent = 'Riproduzione Ambient Spettrale';
+                playSpookyNote();
+            }
+        }
+
+        playMusicBtn.addEventListener('click', toggleMusic);
+
+        volumeSlider.addEventListener('input', (e) => {
+            if (masterGain) {
+                masterGain.gain.value = parseFloat(e.target.value);
+            }
+        });
 
         // --- Gestione del pulsante "Torna su" ---
         const scrollToTopBtn = document.getElementById("scrollToTopBtn");
