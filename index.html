@@ -496,7 +496,7 @@
     </button>
     <div class="music-info">
         <i class="fa-solid fa-music" style="color: var(--primary);"></i>
-        <span id="musicStatusText">Musica Halloween Spettrale</span>
+        <span id="musicStatusText"></span>
     </div>
     <div class="music-volume">
         <i class="fa-solid fa-volume-high" style="font-size: 0.85rem;"></i>
@@ -636,11 +636,11 @@
                 isPlaying = false;
                 clearTimeout(ambientTimer);
                 musicIcon.className = 'fa-solid fa-play';
-                musicStatusText.textContent = 'Musica in Pausa';
+                musicStatusText.textContent = '';
             } else {
                 isPlaying = true;
                 musicIcon.className = 'fa-solid fa-pause';
-                musicStatusText.textContent = 'Riproduzione Ambient Spettrale';
+                musicStatusText.textContent = '';
                 playSpookyNote();
             }
         }
